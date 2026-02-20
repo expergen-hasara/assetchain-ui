@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
+{% block extra_css %}
+<style>
+.auth-wrap{display:grid;grid-template-columns:1fr 1fr;min-height:100vh;}
+.auth-hero{background:linear-gradient(145deg,#0a0e1a,#0d1829);padding:60px 48px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;}
+.auth-hero::before{content:'';position:absolute;width:350px;height:350px;border-radius:50%;background:radial-gradient(circle,rgba(16,185,129,.1),transparent);top:-60px;right:-60px;pointer-events:none;}
+.auth-form{background:var(--surface);padding:48px;display:flex;flex-direction:column;justify-content:center;overflow-y:auto;}
+</style>
+{% endblock %}
+{% block body %}
+<div class="auth-wrap">
+  <!-- HERO -->
+  <div class="auth-hero">
+    <a href="/" class="logo" style="margin-bottom:48px;display:flex;">
+      <div class="logo-icon">⬡</div>
+      <span style="font-size:24px;">AssetChain</span>
+    </a>
+    <div style="font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1.2;margin-bottom:20px;">
+      Join the Future<br/>of <span style="color:var(--accent2);">Asset Ownership</span>
+    </div>
+    <div style="font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:36px;">
+      Create your account in minutes and start tokenizing real-world assets on the Ethereum blockchain.
+    </div>
+    <div style="background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);border-radius:12px;padding:20px 24px;">
+      <div style="font-size:12px;color:var(--accent2);font-family:'DM Mono',monospace;margin-bottom:10px;">✓ WHAT YOU GET</div>
+      <div style="font-size:13px;color:var(--muted);line-height:2.0;">
+        • Define unlimited real-world assets on-chain<br/>
+        • Mint ERC-20 fractional tokens for any asset<br/>
+        • Access the global token marketplace<br/>
+        • Real-time top 10 beneficiary tracking<br/>
+        • Full portfolio management dashboard
+      </div>
+    </div>
+  </div>
+
+  <!-- FORM -->
+  <div class="auth-form">
+    <div style="font-family:'Syne',sans-serif;font-size:26px;font-weight:800;margin-bottom:6px;">Create Account</div>
+    <div style="font-size:14px;color:var(--muted);margin-bottom:28px;">Fill in your details to get started</div>
+
+    {% if error %}
+    <div class="alert alert-error">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">First Name *</label>
+          <input class="form-input" type="text" name="first_name" placeholder="Ashan" required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Last Name *</label>
+          <input class="form-input" type="text" name="last_name" placeholder="Perera" required/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email Address *</label>
+        <input class="form-input" type="email" name="email" placeholder="you@example.com" required/>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Password *</label>
+          <input class="form-input" type="password" name="password" placeholder="Min 8 characters" required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Confirm Password *</label>
+          <input class="form-input" type="password" name="confirm_password" placeholder="Repeat password" required/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Wallet Address (optional)</label>
+        <input class="form-input" type="text" name="wallet" placeholder="0x..." style="font-family:'DM Mono',monospace;font-size:13px;"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Role</label>
+        <select class="form-select" name="role">
+          <option>Asset Owner / Issuer</option>
+          <option>Investor / Token Buyer</option>
+          <option>Asset Manager</option>
+          <option>Auditor</option>
+        </select>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:24px;">
+        <div style="width:16px;height:16px;border-radius:4px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:10px;color:white;flex-shrink:0;margin-top:2px;">✓</div>
+        <div style="font-size:12px;color:var(--muted);">
+          I agree to the <a href="#" style="color:var(--accent);text-decoration:none;">Terms of Service</a> and
+          <a href="#" style="color:var(--accent);text-decoration:none;">Privacy Policy</a>.
+          I understand that on-chain transactions are irreversible.
+        </div>
+      </div>
+      <button type="submit" class="btn btn-success btn-full" style="margin-bottom:20px;">
+        Create My Account
+      </button>
+    </form>
+
+    <div style="text-align:center;font-size:13px;color:var(--muted);">
+      Already have an account?
+      <a href="/login" style="color:var(--accent);text-decoration:none;font-weight:600;">Sign In</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

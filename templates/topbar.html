@@ -1,0 +1,20 @@
+<!-- SHARED TOPBAR -->
+<div class="topbar">
+  <a href="/dashboard" class="logo">
+    <div class="logo-icon">⬡</div>
+    AssetChain
+  </a>
+  <nav class="nav">
+    <a href="/dashboard"   class="{% if active=='dashboard' %}active{% endif %}">Dashboard</a>
+    <a href="/marketplace" class="{% if active=='marketplace' %}active{% endif %}">Marketplace</a>
+    <a href="/portfolio"   class="{% if active=='portfolio' %}active{% endif %}">Portfolio</a>
+    <a href="/transactions" class="{% if active=='transactions' %}active{% endif %}">Transactions</a>
+    <a href="/top-holders" class="{% if active=='top_holders' %}active{% endif %}">Analytics</a>
+  </nav>
+  {% if user %}
+  <a href="/profile" class="wallet-btn">
+    <div class="wallet-dot"></div>
+    {{ user.wallet[:14] if user.wallet != 'Not connected' else '🦊 Connect Wallet' }}
+  </a>
+  {% endif %}
+</div>

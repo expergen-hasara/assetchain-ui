@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block extra_css %}
+<style>
+.auth-wrap{display:grid;grid-template-columns:1fr 1fr;min-height:100vh;}
+.auth-hero{background:linear-gradient(145deg,#0a0e1a 0%,#0d1829 50%,#0a1628 100%);padding:60px 48px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;}
+.auth-hero::before{content:'';position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(59,130,246,.12),transparent);top:-100px;left:-100px;pointer-events:none;}
+.auth-hero::after{content:'';position:absolute;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(139,92,246,.08),transparent);bottom:-80px;right:-80px;pointer-events:none;}
+.auth-form{background:var(--surface);padding:60px 48px;display:flex;flex-direction:column;justify-content:center;}
+.divider{display:flex;align-items:center;gap:12px;margin:24px 0;}
+.divider-line{flex:1;height:1px;background:var(--border);}
+.divider-text{font-size:12px;color:var(--muted);font-family:'DM Mono',monospace;white-space:nowrap;}
+.metamask-btn{display:flex;align-items:center;gap:12px;background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.25);border-radius:12px;padding:14px 18px;cursor:pointer;margin-bottom:4px;transition:background .2s;text-decoration:none;}
+.metamask-btn:hover{background:rgba(59,130,246,.14);}
+.metamask-icon{width:36px;height:36px;background:linear-gradient(135deg,#f97316,#f59e0b);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.checkbox-row{display:flex;align-items:center;gap:8px;}
+.checkbox-box{width:16px;height:16px;border-radius:4px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:10px;color:white;flex-shrink:0;}
+.feature-item{display:flex;align-items:center;gap:12px;}
+.feature-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+</style>
+{% endblock %}
+{% block body %}
+<div class="auth-wrap">
+  <!-- HERO -->
+  <div class="auth-hero">
+    <div>
+      <a href="/" class="logo" style="margin-bottom:48px;display:flex;">
+        <div class="logo-icon">⬡</div>
+        <span style="font-size:24px;">AssetChain</span>
+      </a>
+      <div style="font-family:'Syne',sans-serif;font-size:36px;font-weight:800;line-height:1.15;margin-bottom:20px;">
+        Tokenize<br/>Real-World<br/><span style="color:var(--accent);">Assets</span> on Chain
+      </div>
+      <div style="font-size:15px;color:var(--muted);line-height:1.7;max-width:320px;">
+        A decentralised platform to define, tokenize, trade and manage fractional ownership of real-world assets on the Ethereum blockchain.
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <div class="feature-item">
+        <div class="feature-icon" style="background:rgba(59,130,246,.15);">◈</div>
+        <span style="font-size:13px;color:var(--muted);">Define & tokenize any real-world asset</span>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon" style="background:rgba(16,185,129,.15);">⇄</div>
+        <span style="font-size:13px;color:var(--muted);">Buy, sell and transfer fractional tokens</span>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon" style="background:rgba(245,158,11,.15);">▲</div>
+        <span style="font-size:13px;color:var(--muted);">Track top 10 beneficiaries in real-time</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORM -->
+  <div class="auth-form">
+    <div style="font-family:'Syne',sans-serif;font-size:26px;font-weight:800;margin-bottom:6px;">Welcome Back</div>
+    <div style="font-size:14px;color:var(--muted);margin-bottom:36px;">Sign in to your AssetChain account</div>
+
+    {% if error %}
+    <div class="alert alert-error">{{ error }}</div>
+    {% endif %}
+
+    <!-- MetaMask -->
+    <a href="#" class="metamask-btn">
+      <div class="metamask-icon">🦊</div>
+      <div>
+        <div style="font-size:14px;font-weight:600;color:var(--text);">Connect MetaMask Wallet</div>
+        <div style="font-size:12px;color:var(--muted);">Recommended for blockchain interactions</div>
+      </div>
+      <div style="margin-left:auto;color:var(--accent);font-size:18px;">→</div>
+    </a>
+
+    <div class="divider">
+      <div class="divider-line"></div>
+      <div class="divider-text">or sign in with email</div>
+      <div class="divider-line"></div>
+    </div>
+
+    <form method="POST">
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input class="form-input" type="email" name="email" placeholder="your@email.com" required/>
+      </div>
+      <div class="form-group" style="margin-bottom:8px;">
+        <label class="form-label">Password</label>
+        <input class="form-input" type="password" name="password" placeholder="Enter your password" required/>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;">
+        <label class="checkbox-row" style="font-size:13px;color:var(--muted);cursor:pointer;">
+          <div class="checkbox-box">✓</div>
+          Remember me
+        </label>
+        <a href="#" style="font-size:13px;color:var(--accent);text-decoration:none;">Forgot password?</a>
+      </div>
+      <button type="submit" class="btn btn-primary btn-full" style="margin-bottom:20px;">
+        Sign In to AssetChain
+      </button>
+    </form>
+
+    <div style="text-align:center;font-size:13px;color:var(--muted);">
+      Don't have an account?
+      <a href="/register" style="color:var(--accent);text-decoration:none;font-weight:600;">Create Account</a>
+    </div>
+
+    <div style="margin-top:40px;padding-top:20px;border-top:1px solid var(--border);display:flex;align-items:center;gap:8px;">
+      <div class="wallet-dot"></div>
+      <span style="font-size:12px;color:var(--muted);font-family:'DM Mono',monospace;">Ethereum Mainnet · Secure Connection</span>
+    </div>
+
+    <div style="margin-top:12px;padding:10px 14px;background:rgba(59,130,246,.06);border-radius:8px;font-size:12px;color:var(--muted);">
+      💡 <strong style="color:var(--text);">Demo credentials:</strong> ashan@assetchain.io / password123
+    </div>
+  </div>
+</div>
+{% endblock %}

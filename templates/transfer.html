@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Transfer{% endblock %}
+{% block body %}
+{% include "topbar.html" %}
+<div class="layout">
+  {% include "sidebar.html" %}
+  <div class="main">
+    <div class="page-header">
+      <div><div class="page-title">Buy / Sell / Transfer</div><div class="page-sub">Execute token transactions on the blockchain</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:600px 1fr;gap:24px;">
+      <div class="card">
+        <div class="card-header"><div class="card-title">⇄ Transaction Wizard</div></div>
+        <div class="card-body">
+          {% if success %}<div class="alert alert-success">{{ success }}</div>{% endif %}
+          {% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
+          <div class="steps">
+            <div class="step"><div class="step-num step-done">✓</div><div class="step-label">Select Asset</div></div>
+            <div class="step-line step-line-done"></div>
+            <div class="step"><div class="step-num step-active">2</div><div class="step-label">Set Amount</div></div>
+            <div class="step-line"></div>
+            <div class="step"><div class="step-num step-pending">3</div><div class="step-label">Confirm</div></div>
+          </div>
+          <form method="POST">
+            <div class="form-group"><label class="form-label">Action</label>
+              <div class="action-toggle">
+                <label style="cursor:pointer;"><input type="radio" name="action" value="Buy" checked style="display:none;"/>
+                  <div class="action-btn selected-buy" onclick="this.parentElement.click()">🛒 Buy</div></label>
+                <label style="cursor:pointer;"><input type="radio" name="action" value="Sell" style="display:none;"/>
+                  <div class="action-btn" onclick="this.parentElement.click()">💸 Sell</div></label>
+                <label style="cursor:pointer;"><input type="radio" name="action" value="Transfer" style="display:none;"/>
+                  <div class="action-btn" onclick="this.parentElement.click()">⇄ Transfer</div></label>
+              </div>
+            </div>
+            <div class="form-group"><label class="form-label">Select Asset *</label>
+              <select class="form-select" name="asset_id" required>
+                <option value="">-- Choose an asset --</option>
+                {% for a in assets %}{% if a.supply > 0 %}<option value="{{ a.id }}">{{ a.name }} ({{ a.symbol }}) – ${{ a.price }}/token</option>{% endif %}{% endfor %}
+              </select>
+            </div>
+            <div class="form-group"><label class="form-label">Recipient Address *</label><input class="form-input" type="text" name="recipient" placeholder="0x..." style="font-family:'DM Mono',monospace;font-size:13px;"/></div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-label">Token Amount *</label><input class="form-input" type="number" name="amount" placeholder="10000" min="1" required/></div>
+              <div class="form-group"><label class="form-label">Estimated Value</label><input class="form-input" value="Calculated on submit" readonly style="color:var(--muted);font-size:12px;"/></div>
+            </div>
+            <div style="background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.2);border-radius:10px;padding:12px 14px;font-size:12px;color:var(--muted);margin-bottom:16px;">
+              ⛽ Estimated gas fee: ~0.0024 ETH ($8.12)
+            </div>
+            <button type="submit" class="btn btn-success btn-full">✓ Confirm Transaction</button>
+          </form>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Recent Transactions</div></div>
+        <table class="tx-table">
+          <thead><tr><th>Type</th><th>Asset</th><th>Tokens</th><th>Value</th><th>Time</th></tr></thead>
+          <tbody>
+            {% for tx in transactions[:8] %}
+            <tr>
+              <td><span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;"><span style="width:6px;height:6px;border-radius:50%;background:{{ tx.type_color }};display:inline-block;"></span>{{ tx.type }}</span></td>
+              <td style="font-size:12px;font-weight:500;">{{ tx.symbol }}</td>
+              <td style="font-family:'Syne',sans-serif;font-weight:700;">{{ tx.tokens }}</td>
+              <td style="color:{{ tx.type_color }};font-weight:600;">{{ tx.value }}</td>
+              <td style="color:var(--muted);font-size:12px;">{{ tx.time }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

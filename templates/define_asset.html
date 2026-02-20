@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Define Asset{% endblock %}
+{% block body %}
+{% include "topbar.html" %}
+<div class="layout">
+  {% include "sidebar.html" %}
+  <div class="main">
+    <div class="page-header">
+      <div><div class="page-title">Define New Asset</div><div class="page-sub">Register a real-world asset permanently on the blockchain</div></div>
+      <span class="tag tag-blue">Step 1 of 2</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 360px;gap:24px;">
+      <div class="card">
+        <div class="card-header"><div class="card-title">◈ Asset Details</div></div>
+        <div class="card-body">
+          {% if success %}<div class="alert alert-success">{{ success }}</div>{% endif %}
+          {% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
+          <div class="alert alert-info">ℹ Once defined, asset details are permanently stored on-chain and cannot be altered.</div>
+          <form method="POST">
+            <div class="form-group"><label class="form-label">Asset Name *</label><input class="form-input" type="text" name="name" placeholder="e.g. Marina Bay Tower A" required/></div>
+            <div class="form-group"><label class="form-label">Asset Type *</label>
+              <select class="form-select" name="type">
+                <option>Real Estate</option><option>Hospitality</option><option>Industrial</option>
+                <option>Residential</option><option>Commercial</option><option>Retail</option><option>Other</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-label">Location *</label><input class="form-input" type="text" name="location" placeholder="City, Country" required/></div>
+              <div class="form-group"><label class="form-label">Valuation (USD) *</label><input class="form-input" type="text" name="valuation" placeholder="2400000" required/></div>
+            </div>
+            <div class="form-group"><label class="form-label">Description</label><textarea class="form-textarea" name="description" placeholder="Describe the asset..."></textarea></div>
+            <div class="form-group"><label class="form-label">Owner Wallet Address</label><input class="form-input" type="text" name="owner_wallet" value="{{ user.wallet }}" style="font-family:'DM Mono',monospace;font-size:13px;"/></div>
+            <button type="submit" class="btn btn-primary btn-full">＋ Define Asset on Chain</button>
+          </form>
+        </div>
+      </div>
+      <!-- RIGHT PANEL -->
+      <div>
+        <div class="card" style="margin-bottom:16px;">
+          <div class="card-header"><div class="card-title">All Defined Assets</div><span class="tag tag-blue">{{ assets|length }}</span></div>
+          {% for a in assets[:5] %}
+          <div class="asset-item">
+            <div class="asset-thumb" style="background:{{ a.color }}22;">{{ a.emoji }}</div>
+            <div style="flex:1;"><div style="font-size:13px;font-weight:600;">{{ a.name }}</div><div style="font-size:11px;color:var(--muted);">{{ a.id }} · {{ a.type }}</div></div>
+            <span class="tag tag-{% if a.status=='Active' %}green{% elif a.status=='IPO' %}red{% else %}amber{% endif %}">{{ a.status }}</span>
+          </div>
+          {% endfor %}
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">Total Assets Count</div></div>
+          <div class="card-body" style="text-align:center;">
+            <div style="font-family:'Syne',sans-serif;font-size:52px;font-weight:800;color:var(--accent);">{{ assets|length }}</div>
+            <div style="font-size:13px;color:var(--muted);margin-top:4px;">Assets defined on-chain</div>
+            <div style="margin-top:16px;" class="progress-bar"><div class="progress-fill" style="width:{{ [assets|length * 4, 100]|min }}%;"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

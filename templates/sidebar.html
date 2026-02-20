@@ -1,0 +1,30 @@
+<!-- SHARED SIDEBAR -->
+<div class="sidebar">
+  <div class="sidebar-section">Overview</div>
+  <a href="/dashboard"    class="sidebar-item {% if active=='dashboard' %}active{% endif %}"><span class="s-icon">▦</span> Dashboard</a>
+  <a href="/marketplace"  class="sidebar-item {% if active=='marketplace' %}active{% endif %}"><span class="s-icon">◎</span> Marketplace <span class="sidebar-badge green">{{ assets|length if assets else 6 }}</span></a>
+
+  <div class="sidebar-section">Actions</div>
+  <a href="/define-asset" class="sidebar-item {% if active=='define' %}active{% endif %}"><span class="s-icon">＋</span> Define Asset</a>
+  <a href="/tokenize"     class="sidebar-item {% if active=='tokenize' %}active{% endif %}"><span class="s-icon">⬡</span> Tokenize</a>
+  <a href="/transfer"     class="sidebar-item {% if active=='transfer' %}active{% endif %}"><span class="s-icon">⇄</span> Transfer</a>
+
+  <div class="sidebar-section">Analytics</div>
+  <a href="/top-holders"  class="sidebar-item {% if active=='top_holders' %}active{% endif %}"><span class="s-icon">▲</span> Top Holders</a>
+  <a href="/transactions" class="sidebar-item {% if active=='transactions' %}active{% endif %}"><span class="s-icon">≋</span> Transactions</a>
+  <a href="/portfolio"    class="sidebar-item {% if active=='portfolio' %}active{% endif %}"><span class="s-icon">◑</span> Portfolio</a>
+
+  <div class="sidebar-section">Account</div>
+  <a href="/notifications" class="sidebar-item {% if active=='notifications' %}active{% endif %}">
+    <span class="s-icon">🔔</span> Notifications
+    <span class="sidebar-badge red">3</span>
+  </a>
+  <a href="/profile"      class="sidebar-item {% if active=='profile' %}active{% endif %}"><span class="s-icon">◉</span> Profile</a>
+  <a href="/logout"       class="sidebar-item"><span class="s-icon">⏏</span> Logout</a>
+
+  <div class="sidebar-net">
+    <div style="font-size:11px;color:var(--muted);margin-bottom:6px;font-family:'DM Mono',monospace;">NETWORK</div>
+    <div style="font-size:12px;font-weight:600;color:var(--accent2);">● Ethereum Mainnet</div>
+    <div style="font-size:11px;color:var(--muted);margin-top:4px;">Gas: 12 gwei</div>
+  </div>
+</div>
