@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AssetChain – Full UI Design</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #0A0E1A;
+    --surface: #111827;
+    --surface2: #1a2235;
+    --border: #1e2d45;
+    --accent: #3B82F6;
+    --accent2: #10B981;
+    --accent3: #F59E0B;
+    --accent4: #8B5CF6;
+    --danger: #EF4444;
+    --text: #E8EDF5;
+    --muted: #6B7FA3;
+    --card: #141E30;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#1E1E1E; color:var(--text); font-family:'DM Sans',sans-serif; }
+
+  /* ── NAV ── */
+  .page-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: #111; border-bottom: 1px solid #333;
+    padding: 12px 32px;
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  }
+  .page-nav a {
+    padding: 6px 14px; border-radius: 8px;
+    font-size: 12px; font-family: 'DM Mono', monospace;
+    color: #888; text-decoration: none; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .page-nav a:hover, .page-nav a.active { background: rgba(59,130,246,0.2); color: #3B82F6; }
+  .nav-logo { font-family:'Syne',sans-serif; font-weight:800; font-size:16px; color:#E8EDF5; margin-right:16px; }
+
+  /* ── FIGMA WRAPPER ── */
+  .figma-bg { padding: 48px 32px; }
+  .figma-label {
+    font-family:'DM Mono',monospace; font-size:11px; color:#555;
+    margin-bottom:10px; letter-spacing:0.08em; text-transform:uppercase;
+  }
+  .screen-wrap { margin-bottom: 80px; }
+  .device {
+    background: var(--bg); border-radius: 16px; overflow: hidden;
+    border: 1px solid #2a2a2a;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px #333;
+    max-width: 1280px; margin: 0 auto;
+  }
+
+  /* ── TOPBAR ── */
+  .topbar {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 32px; height:64px;
+    background:rgba(10,14,26,0.97);
+    border-bottom:1px solid var(--border);
+  }
+  .logo { font-family:'Syne',sans-serif; font-weight:800; font-size:20px; display:flex; align-items:center; gap:10px; }
+  .logo-icon { width:32px;height:32px;background:linear-gradient(135deg,var(--accent),var(--accent4));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px; }
+  .nav { display:flex; gap:4px; }
+  .nav a { padding:6px 16px;border-radius:8px;font-size:13px;font-weight:500;color:var(--muted);text-decoration:none;cursor:pointer; }
+  .nav a.active { background:rgba(59,130,246,0.15); color:var(--accent); }
+  .wallet-btn { display:flex;align-items:center;gap:8px;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.3);color:var(--accent);padding:8px 16px;border-radius:10px;font-size:13px;font-family:'DM Mono',monospace;cursor:pointer; }
+  .wallet-dot { width:8px;height:8px;border-radius:50%;background:var(--accent2);box-shadow:0 0 6px var(--accent2); }
+
+  /* ── LAYOUT ── */
+  .layout { display:grid; grid-template-columns:220px 1fr; min-height:620px; }
+  .sidebar { background:var(--surface);border-right:1px solid var(--border);padding:24px 16px;display:flex;flex-direction:column;gap:4px; }
+  .sidebar-section { font-size:10px;font-family:'DM Mono',monospace;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;padding:16px 12px 8px; }
+  .sidebar-item { display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer; }
+  .sidebar-item.active { background:rgba(59,130,246,0.12);color:var(--text); }
+  .sidebar-item.active .s-icon { color:var(--accent); }
+  .s-icon { font-size:16px;width:20px;text-align:center; }
+  .sidebar-badge { margin-left:auto;background:var(--accent);color:white;font-size:10px;font-family:'DM Mono',monospace;padding:2px 6px;border-radius:20px; }
+  .sidebar-badge.green { background:var(--accent2); }
+
+  /* ── MAIN ── */
+  .main { padding:32px; background:var(--bg); overflow:auto; }
+  .page-header { display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:32px; }
+  .page-title { font-family:'Syne',sans-serif;font-size:28px;font-weight:700; }
+  .page-sub { color:var(--muted);font-size:14px;margin-top:4px; }
+
+  /* ── BUTTONS ── */
+  .btn-primary { display:flex;align-items:center;gap:8px;background:var(--accent);color:white;padding:10px 20px;border-radius:10px;font-size:14px;font-weight:500;border:none;cursor:pointer;font-family:'DM Sans',sans-serif; }
+  .btn-secondary { background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:10px 20px;border-radius:10px;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif; }
+  .btn-outline { background:transparent;border:1px solid var(--accent);color:var(--accent);padding:10px 20px;border-radius:10px;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif; }
+
+  /* ── CARDS ── */
+  .card { background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden; }
+  .card-header { display:flex;justify-content:space-between;align-items:center;padding:20px 24px;border-bottom:1px solid var(--border); }
+  .card-title { font-family:'Syne',sans-serif;font-size:15px;font-weight:700; }
+  .card-body { padding:24px; }
+  .tag { font-size:11px;font-family:'DM Mono',monospace;padding:4px 10px;border-radius:20px;font-weight:500; }
+  .tag-blue { background:rgba(59,130,246,0.15);color:var(--accent); }
+  .tag-green { background:rgba(16,185,129,0.15);color:var(--accent2); }
+  .tag-amber { background:rgba(245,158,11,0.15);color:var(--accent3); }
+  .tag-purple { background:rgba(139,92,246,0.15);color:var(--accent4); }
+  .tag-red { background:rgba(239,68,68,0.15);color:var(--danger); }
+
+  /* ── FORMS ── */
+  .form-group { margin-bottom:16px; }
+  .form-label { font-size:12px;font-family:'DM Mono',monospace;color:var(--muted);margin-bottom:6px;display:block;text-transform:uppercase;letter-spacing:0.05em; }
+  .form-input { width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none; }
+  .form-input:focus { border-color:var(--accent); }
+  .form-row { display:grid;grid-template-columns:1fr 1fr;gap:12px; }
+  .form-select { width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none; }
+
+  /* ── STATS ── */
+  .stats-row { display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px; }
+  .stat-card { background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;position:relative;overflow:hidden; }
+  .stat-card::before { content:'';position:absolute;top:0;left:0;right:0;height:2px; }
+  .stat-card.blue::before { background:linear-gradient(90deg,var(--accent),transparent); }
+  .stat-card.green::before { background:linear-gradient(90deg,var(--accent2),transparent); }
+  .stat-card.amber::before { background:linear-gradient(90deg,var(--accent3),transparent); }
+  .stat-card.purple::before { background:linear-gradient(90deg,var(--accent4),transparent); }
+  .stat-label { font-size:12px;color:var(--muted);margin-bottom:8px;font-weight:500; }
+  .stat-value { font-family:'Syne',sans-serif;font-size:28px;font-weight:700; }
+  .stat-change { font-size:12px;color:var(--accent2);margin-top:6px; }
+  .stat-icon { position:absolute;top:20px;right:20px;font-size:20px;opacity:0.4; }
+
+  /* ── LEADERBOARD ── */
+  .leaderboard-item { display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.04); }
+  .leaderboard-item:last-child { border-bottom:none; }
+  .rank { width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:12px;flex-shrink:0; }
+  .rank-1 { background:linear-gradient(135deg,#F59E0B,#EF4444);color:white; }
+  .rank-2 { background:linear-gradient(135deg,#6B7FA3,#94a3b8);color:white; }
+  .rank-3 { background:linear-gradient(135deg,#92400e,#b45309);color:white; }
+  .rank-n { background:var(--surface2);color:var(--muted); }
+  .lb-addr { font-family:'DM Mono',monospace;font-size:12px;color:var(--text);flex:1; }
+  .lb-tokens { font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--accent2); }
+  .lb-bar-wrap { width:80px;height:4px;background:var(--surface2);border-radius:2px; }
+  .lb-bar { height:4px;border-radius:2px;background:linear-gradient(90deg,var(--accent),var(--accent2)); }
+
+  /* ── ASSET ITEM ── */
+  .asset-item { display:flex;align-items:center;gap:16px;padding:16px 24px;border-bottom:1px solid var(--border);cursor:pointer; }
+  .asset-item:last-child { border-bottom:none; }
+  .asset-thumb { width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0; }
+  .asset-name { font-weight:600;font-size:14px; }
+  .asset-meta { font-size:12px;color:var(--muted);margin-top:2px; }
+  .asset-price { font-family:'Syne',sans-serif;font-weight:700;font-size:15px; }
+  .asset-tokens-count { font-size:12px;color:var(--muted);margin-top:2px; }
+
+  /* ── TX TABLE ── */
+  .tx-table { width:100%;border-collapse:collapse; }
+  .tx-table th { text-align:left;font-size:11px;font-family:'DM Mono',monospace;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;padding:0 24px 12px;border-bottom:1px solid var(--border); }
+  .tx-table td { padding:14px 24px;font-size:13px;border-bottom:1px solid rgba(255,255,255,0.04); }
+  .tx-table tr:last-child td { border-bottom:none; }
+  .dot { width:6px;height:6px;border-radius:50%;display:inline-block; }
+
+  /* ── CHART ── */
+  .chart-area { height:120px;display:flex;align-items:flex-end;gap:6px;padding:0 4px; }
+  .bar-wrap { flex:1;display:flex;flex-direction:column;align-items:center;gap:6px; }
+  .bar { width:100%;border-radius:4px 4px 0 0;background:linear-gradient(180deg,var(--accent),rgba(59,130,246,0.3)); }
+  .bar-label { font-size:10px;color:var(--muted);font-family:'DM Mono',monospace; }
+
+  /* ── STEP WIZARD ── */
+  .transfer-steps { display:flex;justify-content:space-between;align-items:center;margin-bottom:24px; }
+  .step { display:flex;flex-direction:column;align-items:center;gap:6px;z-index:1; }
+  .step-num { width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;font-size:13px; }
+  .step-num.done { background:var(--accent2);color:white; }
+  .step-num.active { background:var(--accent);color:white;box-shadow:0 0 12px rgba(59,130,246,0.4); }
+  .step-num.pending { background:var(--surface2);color:var(--muted);border:1px solid var(--border); }
+  .step-label { font-size:11px;color:var(--muted); }
+  .step-line { flex:1;height:1px;background:var(--border);margin:0 8px;margin-bottom:18px; }
+  .step-line.done { background:var(--accent2); }
+
+  /* ── MINI SCREENS ── */
+  .screens-row { display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1280px;margin:0 auto; }
+  .mini-device { background:var(--bg);border-radius:12px;border:1px solid #2a2a2a;overflow:hidden;box-shadow:0 20px 40px rgba(0,0,0,0.5); }
+  .mini-topbar { background:var(--surface);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;justify-content:space-between; }
+  .mini-title { font-family:'Syne',sans-serif;font-weight:700;font-size:13px; }
+  .mini-body { padding:16px; }
+
+  /* ── DESIGN SYSTEM ── */
+  .comp-panel { background:#252525;border-radius:12px;padding:20px;max-width:1280px;margin:0 auto 16px; }
+  .comp-title { font-family:'DM Mono',monospace;font-size:12px;color:#888;margin-bottom:16px;text-transform:uppercase;letter-spacing:0.08em; }
+  .comp-row { display:flex;gap:12px;flex-wrap:wrap;align-items:center; }
+  .comp-item { display:flex;flex-direction:column;align-items:center;gap:8px; }
+  .comp-label { font-family:'DM Mono',monospace;font-size:10px;color:#666;text-align:center; }
+  .typo-section { background:#252525;border-radius:12px;padding:20px;max-width:1280px;margin:0 auto 16px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px; }
+
+  /* ── NOTIFICATION ── */
+  .notif-item { display:flex;align-items:flex-start;gap:12px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.04); }
+  .notif-item:last-child { border-bottom:none; }
+  .notif-icon { width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0; }
+  .notif-content { flex:1; }
+  .notif-title { font-size:13px;font-weight:600;margin-bottom:3px; }
+  .notif-sub { font-size:12px;color:var(--muted); }
+  .notif-time { font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;flex-shrink:0; }
+
+  /* ── PORTFOLIO DONUT ── */
+  .donut-wrap { display:flex;align-items:center;gap:24px; }
+  .donut-svg { flex-shrink:0; }
+  .donut-legend { display:flex;flex-direction:column;gap:10px; }
+  .legend-item { display:flex;align-items:center;gap:10px; }
+  .legend-dot { width:10px;height:10px;border-radius:50%;flex-shrink:0; }
+  .legend-name { font-size:13px; }
+  .legend-pct { font-family:'Syne',sans-serif;font-weight:700;font-size:13px;margin-left:auto; }
+
+  /* ── PROFILE ── */
+  .profile-avatar { width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;background:linear-gradient(135deg,var(--accent),var(--accent4));margin-bottom:12px; }
+  .profile-field { display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.04); }
+  .profile-field:last-child { border-bottom:none; }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width:6px; }
+  ::-webkit-scrollbar-track { background:transparent; }
+  ::-webkit-scrollbar-thumb { background:#333;border-radius:3px; }
+</style>
+</head>
+<body>
+
+<!-- PAGE NAVIGATION -->
+<div class="page-nav">
+  <div class="nav-logo">⬡ AssetChain UI</div>
+  <a href="#login">Login</a>
+  <a href="#register">Register</a>
+  <a href="#dashboard">Dashboard</a>
+  <a href="#define">Define Asset</a>
+  <a href="#tokenize">Tokenize</a>
+  <a href="#marketplace">Marketplace</a>
+  <a href="#portfolio">Portfolio</a>
+  <a href="#transfer">Transfer</a>
+  <a href="#topholders">Top Holders</a>
+  <a href="#notifications">Notifications</a>
+  <a href="#profile">Profile</a>
+  <a href="#system">Design System</a>
+</div>
+
+<div class="figma-bg">
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SCREEN 1: LOGIN -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="screen-wrap" id="login">
+  <div class="figma-label">Screen 1 / Login Page — Wallet & Credentials Authentication</div>
+  <div class="device" style="min-height:680px;display:grid;grid-template-columns:1fr 1fr;">
+
+    <!-- LEFT HERO -->
+    <div style="background:linear-gradient(145deg,#0a0e1a 0%,#0d1829 50%,#0a1628 100%);padding:60px 48px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;">
+      <!-- decorative circles -->
+      <div style="position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(59,130,246,0.12),transparent);top:-100px;left:-100px;pointer-events:none;"></div>
+      <div style="position:absolute;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(139,92,246,0.08),transparent);bottom:-80px;right:-80px;pointer-events:none;"></div>
+
+      <div>
+        <div class="logo" style="margin-bottom:48px;">
+          <div class="logo-icon">⬡</div>
+          <span style="font-size:24px;">AssetChain</span>
+        </div>
+        <div style="font-family:'Syne',sans-serif;font-size:36px;font-weight:800;line-height:1.15;margin-bottom:20px;">
+          Tokenize<br/>Real-World<br/><span style="color:var(--accent);">Assets</span> on Chain
+        </div>
+        <div style="font-size:15px;color:var(--muted);line-height:1.7;max-width:320px;">
+          A decentralised platform to define, tokenize, trade and manage fractional ownership of real-world assets on the Ethereum blockchain.
+        </div>
+      </div>
+
+      <!-- FEATURES -->
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:32px;height:32px;border-radius:8px;background:rgba(59,130,246,0.15);display:flex;align-items:center;justify-content:center;font-size:14px;">◈</div>
+          <span style="font-size:13px;color:var(--muted);">Define & tokenize any real-world asset</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:32px;height:32px;border-radius:8px;background:rgba(16,185,129,0.15);display:flex;align-items:center;justify-content:center;font-size:14px;">⇄</div>
+          <span style="font-size:13px;color:var(--muted);">Buy, sell and transfer fractional tokens</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:32px;height:32px;border-radius:8px;background:rgba(245,158,11,0.15);display:flex;align-items:center;justify-content:center;font-size:14px;">▲</div>
+          <span style="font-size:13px;color:var(--muted);">Track top 10 beneficiaries in real-time</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT FORM -->
+    <div style="background:var(--surface);padding:60px 48px;display:flex;flex-direction:column;justify-content:center;">
+      <div style="font-family:'Syne',sans-serif;font-size:26px;font-weight:800;margin-bottom:6px;">Welcome Back</div>
+      <div style="font-size:14px;color:var(--muted);margin-bottom:40px;">Sign in to your AssetChain account</div>
+
+      <!-- WALLET CONNECT BTN -->
+      <div style="display:flex;align-items:center;gap:12px;background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.25);border-radius:12px;padding:14px 18px;cursor:pointer;margin-bottom:28px;">
+        <div style="width:36px;height:36px;background:linear-gradient(135deg,#f97316,#f59e0b);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;">🦊</div>
+        <div>
+          <div style="font-size:14px;font-weight:600;">Connect MetaMask Wallet</div>
+          <div style="font-size:12px;color:var(--muted);">Recommended for blockchain interactions</div>
+        </div>
+        <div style="margin-left:auto;color:var(--accent);font-size:18px;">→</div>
+      </div>
+
+      <!-- DIVIDER -->
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:28px;">
+        <div style="flex:1;height:1px;background:var(--border);"></div>
+        <div style="font-size:12px;color:var(--muted);font-family:'DM Mono',monospace;">or sign in with email</div>
+        <div style="flex:1;height:1px;background:var(--border);"></div>
+      </div>
+
+      <!-- EMAIL FORM -->
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input class="form-input" value="user@assetchain.io" readonly/>
+      </div>
+      <div class="form-group" style="margin-bottom:8px;">
+        <label class="form-label">Password</label>
+        <div style="position:relative;">
+          <input class="form-input" type="password" value="password123" readonly style="padding-right:44px;"/>
+          <span style="position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:14px;cursor:pointer;">👁</span>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;">
+        <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);cursor:pointer;">
+          <div style="width:16px;height:16px;border-radius:4px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:10px;color:white;">✓</div>
+          Remember me
+        </label>
+        <a style="font-size:13px;color:var(--accent);text-decoration:none;cursor:pointer;">Forgot password?</a>
+      </div>
+
+      <button class="btn-primary" style="width:100%;justify-content:center;padding:13px;font-size:15px;border-radius:12px;margin-bottom:20px;">
+        Sign In to AssetChain
+      </button>
+
+      <div style="text-align:center;font-size:13px;color:var(--muted);">
+        Don't have an account? <a style="color:var(--accent);text-decoration:none;cursor:pointer;font-weight:600;">Create Account</a>
+      </div>
+
+      <div style="margin-top:40px;padding-top:20px;border-top:1px solid var(--border);display:flex;align-items:center;gap:8px;">
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--accent2);box-shadow:0 0 6px var(--accent2);"></div>
+        <span style="font-size:12px;color:var(--muted);font-family:'DM Mono',monospace;">Ethereum Mainnet · Secure Connection</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SCREEN 2: REGISTER -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="screen-wrap" id="register">
+  <div class="figma-label">Screen 2 / Register — Create New Account</div>
+  <div class="device" style="min-height:680px;display:grid;grid-template-columns:1fr 1fr;">
+
+    <!-- LEFT HERO -->
+    <div style="background:linear-gradient(145deg,#0a0e1a,#0d1829);padding:60px 48px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;">
+      <div style="position:absolute;width:350px;height:350px;border-radius:50%;background:radial-gradient(circle,rgba(16,185,129,0.1),transparent);top:-60px;right:-60px;"></div>
+      <div class="logo" style="margin-bottom:48px;">
+        <div class="logo-icon">⬡</div>
+        <span style="font-size:24px;">AssetChain</span>
+      </div>
+      <div style="font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1.2;margin-bottom:20px;">
+        Join the Future<br/>of <span style="color:var(--accent2);">Asset Ownership</span>
+      </div>
+      <div style="font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:40px;">
+        Create your account in minutes and start tokenizing real-world assets on the Ethereum blockchain.
+      </div>
+      <div style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:12px;padding:16px 20px;">
+        <div style="font-size:12px;color:var(--accent2);font-family:'DM Mono',monospace;margin-bottom:8px;">✓ WHAT YOU GET</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.8;">
+          • Define unlimited real-world assets<br/>
+          • Mint ERC-20 fractional tokens<br/>
+          • Access global token marketplace<br/>
+          • Real-time top 10 beneficiary tracking
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT FORM -->
+    <div style="background:var(--surface);padding:60px 48px;display:flex;flex-direction:column;justify-content:center;">
+      <div style="font-family:'Syne',sans-serif;font-size:26px;font-weight:800;margin-bottom:6px;">Create Account</div>
+      <div style="font-size:14px;color:var(--muted);margin-bottom:32px;">Fill in your details to get started</div>
+
+      <div class="form-row" style="margin-bottom:0;">
+        <div class="form-group">
+          <label class="form-label">First Name</label>
+          <input class="form-input" value="Ashan" readonly/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Last Name</label>
+          <input class="form-input" value="Perera" readonly/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input class="form-input" value="ashan@assetchain.io" readonly/>
+      </div>
+      <div class="form-row" style="margin-bottom:0;">
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input class="form-input" type="password" value="password123" readonly/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Confirm Password</label>
+          <input class="form-input" type="password" value="password123" readonly/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Wallet Address (optional)</label>
+        <input class="form-input" value="0x3f4a...9b2c" readonly style="font-family:'DM Mono',monospace;font-size:13px;"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Role</label>
+        <select class="form-select"><option>Asset Owner / Issuer</option></select>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:24px;">
+        <div style="width:16px;height:16px;border-radius:4px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:10px;color:white;flex-shrink:0;margin-top:2px;">✓</div>
+        <div style="font-size:12px;color:var(--muted);">I agree to the <a style="color:var(--accent);text-decoration:none;">Terms of Service</a> and <a style="color:var(--accent);text-decoration:none;">Privacy Policy</a>. I understand that on-chain transactions are irreversible.</div>
+      </div>
+
+      <button class="btn-primary" style="width:100%;justify-content:center;padding:13px;font-size:15px;border-radius:12px;background:var(--accent2);margin-bottom:20px;">
+        Create My Account
+      </button>
+      <div style="text-align:center;font-size:13px;color:var(--muted);">
+        Already have an account? <a style="color:var(--accent);text-decoration:none;cursor:pointer;font-weight:600;">Sign In</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SCREEN 3: DASHBOARD -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="screen-wrap" id="dashboard">
+  <div class="figma-label">Screen 3 / Dashboard — Main Overview</div>
+  <div class="device">
+    <div class="topbar">
+      <div class="logo"><div class="logo-icon">⬡</div>AssetChain</div>
+      <nav class="nav">
+        <a class="active">Dashboard</a><a>My Assets</a><a>Marketplace</a><a>Portfolio</a><a>Transactions</a>
+      </nav>
+      <div class="wallet-btn"><div class="wallet-dot"></div>0x3f4a...9b2c</div>
+    </div>
+    <div class="layout">
+      <div class="sidebar">
+        <div class="sidebar-section">Overview</div>
+        <div class="sidebar-item active"><span class="s-icon">▦</span>Dashboard</div>
+        <div class="sidebar-item"><span class="s-icon">◈</span>My Assets<span class="sidebar-badge">4</span></div>
+        <div class="sidebar-item"><span class="s-icon">◎</span>Marketplace<span class="sidebar-badge green">12</span></div>
+        <div class="sidebar-section">Actions</div>
+        <div class="sidebar-item"><span class="s-icon">＋</span>Define Asset</div>
+        <div class="sidebar-item"><span class="s-icon">⟳</span>Tokenize</div>
+        <div class="sidebar-item"><span class="s-icon">⇄</span>Transfer</div>
+        <div class="sidebar-item"><span class="s-icon">◑</span>Buy / Sell</div>
+        <div class="sidebar-section">Analytics</div>
+        <div class="sidebar-item"><span class="s-icon">▲</span>Top Holders</div>
+        <div class="sidebar-item"><span class="s-icon">≋</span>Transactions</div>
+        <div class="sidebar-item"><span class="s-icon">🔔</span>Notifications<span class="sidebar-badge" style="background:var(--danger);">3</span></div>
+        <div class="sidebar-section">Account</div>
+        <div class="sidebar-item"><span class="s-icon">◉</span>Profile</div>
+        <div style="margin-top:auto;padding:16px;background:rgba(59,130,246,0.08);border-radius:12px;border:1px solid rgba(59,130,246,0.2);">
+          <div style="font-size:11px;color:var(--muted);margin-bottom:6px;font-family:'DM Mono',monospace;">NETWORK</div>
+          <div style="font-size:12px;font-weight:600;color:var(--accent2);">● Ethereum Mainnet</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px;">Gas: 12 gwei</div>
+        </div>
+      </div>
+      <div class="main">
+        <div class="page-header">
+          <div><div class="page-title">Asset Dashboard</div><div class="page-sub">Manage and monitor your tokenized real-world assets</div></div>
+          <div style="display:flex;gap:10px;"><button class="btn-secondary">⬇ Export</button><button class="btn-primary">＋ New Asset</button></div>
+        </div>
+        <div class="stats-row">
+          <div class="stat-card blue"><div class="stat-icon">◈</div><div class="stat-label">Total Assets Created</div><div class="stat-value">24</div><div class="stat-change">↑ +3 this month</div></div>
+          <div class="stat-card green"><div class="stat-icon">⬡</div><div class="stat-label">Tokens in Circulation</div><div class="stat-value">2.4M</div><div class="stat-change">↑ +12.4%</div></div>
+          <div class="stat-card amber"><div class="stat-icon">◑</div><div class="stat-label">Total Asset Value</div><div class="stat-value">$8.2M</div><div class="stat-change">↑ +5.8%</div></div>
+          <div class="stat-card purple"><div class="stat-icon">▲</div><div class="stat-label">Unique Holders</div><div class="stat-value">347</div><div class="stat-change">↑ +28 new</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 360px;gap:20px;">
+          <div class="card">
+            <div class="card-header"><div class="card-title">Active Assets</div><span class="tag tag-blue">24 Total</span></div>
+            <div class="asset-item"><div class="asset-thumb" style="background:rgba(59,130,246,0.15);">🏢</div><div style="flex:1;"><div class="asset-name">Marina Bay Tower A</div><div class="asset-meta">Real Estate · Singapore · 1,000,000 tokens</div></div><div style="text-align:right;"><div class="asset-price">$2,400,000</div><div style="font-size:12px;color:var(--accent2);">● Active</div></div></div>
+            <div class="asset-item"><div class="asset-thumb" style="background:rgba(245,158,11,0.15);">🏨</div><div style="flex:1;"><div class="asset-name">Colombo Hilton Suite 14</div><div class="asset-meta">Real Estate · Sri Lanka · 500,000 tokens</div></div><div style="text-align:right;"><div class="asset-price">$980,000</div><div style="font-size:12px;color:var(--accent2);">● Active</div></div></div>
+            <div class="asset-item"><div class="asset-thumb" style="background:rgba(139,92,246,0.15);">🏭</div><div style="flex:1;"><div class="asset-name">Industrial Warehouse K7</div><div class="asset-meta">Industrial · London · 750,000 tokens</div></div><div style="text-align:right;"><div class="asset-price">$1,750,000</div><div style="font-size:12px;color:var(--accent3);">◑ Partial</div></div></div>
+            <div style="padding:20px 24px;border-top:1px solid var(--border);">
+              <div style="font-size:12px;color:var(--muted);margin-bottom:12px;font-family:'DM Mono',monospace;">ASSETS CREATED PER MONTH</div>
+              <div class="chart-area">
+                <div class="bar-wrap"><div class="bar" style="height:40%"></div><div class="bar-label">Sep</div></div>
+                <div class="bar-wrap"><div class="bar" style="height:55%"></div><div class="bar-label">Oct</div></div>
+                <div class="bar-wrap"><div class="bar" style="height:35%"></div><div class="bar-label">Nov</div></div>
+                <div class="bar-wrap"><div class="bar" style="height:70%"></div><div class="bar-label">Dec</div></div>
+                <div class="bar-wrap"><div class="bar" style="height:85%"></div><div class="bar-label">Jan</div></div>
+                <div class="bar-wrap"><div class="bar" style="height:100%;background:linear-gradient(180deg,var(--accent2),rgba(16,185,129,0.3))"></div><div class="bar-label">Feb</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title">Top 10 Beneficiaries</div><span class="tag tag-green">Live</span></div>
+            <div style="padding:12px 20px;">
+              ${[{r:1,a:'0x3f4a...9b2c',t:'284,500',p:100},{r:2,a:'0x8c1d...4e7f',t:'210,300',p:74},{r:3,a:'0x2b9e...7a1d',t:'178,200',p:63},{r:4,a:'0x5f2c...3b8a',t:'142,100',p:50},{r:5,a:'0x9d4f...6c2e',t:'118,900',p:42},{r:6,a:'0x1a7b...0f5d',t:'97,400',p:34},{r:7,a:'0x6e3d...2c9b',t:'84,200',p:30},{r:8,a:'0x4c8a...1d6f',t:'71,500',p:25},{r:9,a:'0x7f1e...9a4c',t:'58,300',p:21},{r:10,a:'0x0b5d...7e2a',t:'44,100',p:16}].map(h=>`<div class="leaderboard-item"><div class="rank ${h.r<=3?'rank-'+h.r:'rank-n'}">${h.r}</div><div class="lb-addr">${h.a}</div><div class="lb-bar-wrap"><div class="lb-bar" style="width:${h.p}%"></div></div><div class="lb-tokens">${h.t}</div></div>`).join('')}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SCREENS 4-6: DEFINE / TOKENIZE / TRANSFER -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="screen-wrap" id="define">
+  <div class="figma-label">Screens 4–6 / Define Asset · Tokenize · Transfer</div>
+  <div class="screens-row">
+    <!-- DEFINE ASSET -->
+    <div class="mini-device">
+      <div class="mini-topbar"><div class="mini-title">◈ Define New Asset</div><span class="tag tag-blue">Step 1</span></div>
+      <div class="mini-body">
+        <div style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.2);border-radius:10px;padding:10px 12px;margin-bottom:14px;font-size:12px;color:var(--muted);">ℹ Once defined, asset details are stored permanently on-chain.</div>
+        <div class="form-group"><label class="form-label">Asset Name</label><input class="form-input" value="Marina Bay Tower A" readonly/></div>
+        <div class="form-group"><label class="form-label">Asset Type</label><select class="form-select"><option>Real Estate</option></select></div>
+        <div class="form-row"><div class="form-group"><label class="form-label">Location</label><input class="form-input" value="Singapore" readonly/></div><div class="form-group"><label class="form-label">Asset ID</label><input class="form-input" value="AST-0024" readonly style="font-family:'DM Mono',monospace;"/></div></div>
+        <div class="form-group"><label class="form-label">Total Valuation (USD)</label><input class="form-input" value="$2,400,000" readonly/></div>
+        <div class="form-group"><label class="form-label">Description</label><textarea class="form-input" rows="2" style="resize:none;" readonly>Premium commercial tower, Marina Bay, Singapore.</textarea></div>
+        <button class="btn-primary" style="width:100%;justify-content:center;">＋ Define on Chain</button>
+      </div>
+    </div>
+    <!-- TOKENIZE -->
+    <div class="mini-device" id="tokenize">
+      <div class="mini-topbar"><div class="mini-title">⬡ Tokenize Asset</div><span class="tag tag-green">Step 2</span></div>
+      <div class="mini-body">
+        <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--surface2);border-radius:10px;margin-bottom:14px;">
+          <div style="width:36px;height:36px;background:rgba(59,130,246,0.15);border-radius:8px;display:flex;align-items:center;justify-content:center;">🏢</div>
+          <div><div style="font-weight:600;font-size:13px;">Marina Bay Tower A</div><div style="font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;">AST-0024 · $2,400,000</div></div>
+          <span class="tag tag-blue" style="margin-left:auto;">Defined</span>
+        </div>
+        <div class="form-group"><label class="form-label">Token Name</label><input class="form-input" value="MarinaBay Token" readonly/></div>
+        <div class="form-group"><label class="form-label">Symbol</label><input class="form-input" value="MBT" readonly style="font-family:'DM Mono',monospace;"/></div>
+        <div class="form-row"><div class="form-group"><label class="form-label">Total Supply</label><input class="form-input" value="1,000,000" readonly/></div><div class="form-group"><label class="form-label">Price/Token</label><input class="form-input" value="$2.40" readonly/></div></div>
+        <div style="background:var(--surface2);border-radius:10px;padding:10px;margin-bottom:14px;">
+          <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px;"><span style="color:var(--muted);">Distributed</span><span style="color:var(--accent2);font-weight:700;">640,000 / 1,000,000</span></div>
+          <div style="height:6px;background:var(--border);border-radius:3px;"><div style="width:64%;height:6px;border-radius:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));"></div></div>
+        </div>
+        <button class="btn-primary" style="width:100%;justify-content:center;">⬡ Mint Tokens</button>
+      </div>
+    </div>
+    <!-- TRANSFER -->
+    <div class="mini-device" id="transfer">
+      <div class="mini-topbar"><div class="mini-title">⇄ Transfer / Buy / Sell</div><span class="tag tag-amber">Step 3</span></div>
+      <div class="mini-body">
+        <div class="transfer-steps">
+          <div class="step"><div class="step-num done">✓</div><div class="step-label">Asset</div></div>
+          <div class="step-line done"></div>
+          <div class="step"><div class="step-num active">2</div><div class="step-label">Amount</div></div>
+          <div class="step-line"></div>
+          <div class="step"><div class="step-num pending">3</div><div class="step-label">Confirm</div></div>
+        </div>
+        <div class="form-group"><label class="form-label">Action</label>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:4px;">
+            <div style="background:rgba(16,185,129,0.15);border:1px solid var(--accent2);border-radius:8px;padding:8px;text-align:center;font-size:12px;font-weight:600;color:var(--accent2);">Buy</div>
+            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px;text-align:center;font-size:12px;color:var(--muted);">Sell</div>
+            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px;text-align:center;font-size:12px;color:var(--muted);">Transfer</div>
+          </div>
+        </div>
+        <div class="form-group"><label class="form-label">Asset</label><select class="form-select"><option>MarinaBay Token (MBT)</option></select></div>
+        <div class="form-group"><label class="form-label">Recipient</label><input class="form-input" value="0x8c1d...4e7f" readonly style="font-family:'DM Mono',monospace;font-size:13px;"/></div>
+        <div class="form-row"><div class="form-group"><label class="form-label">Tokens</label><input class="form-input" value="10,000" readonly/></div><div class="form-group"><label class="form-label">Value</label><input class="form-input" value="$24,000" readonly style="color:var(--accent2);"/></div></div>
+        <div style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.2);border-radius:10px;padding:10px 12px;font-size:12px;color:var(--muted);margin-bottom:12px;">⛽ Gas: ~0.0024 ETH ($8.12)</div>
+        <button class="btn-primary" style="width:100%;justify-content:center;background:var(--accent2);">✓ Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SCREEN 7: MARKETPLACE -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="screen-wrap" id="marketplace">
+  <div class="figma-label">Screen 7 / Marketplace — Browse & Buy Tokens</div>
+  <div class="device">
+    <div class="topbar">
+      <div class="logo"><div class="logo-icon">⬡</div>AssetChain</div>
+      <nav class="nav"><a>Dashboard</a><a>My Assets</a><a class="active">Marketplace</a><a>Portfolio</a><a>Transactions</a></nav>
+      <div class="wallet-btn"><div class="wallet-dot"></div>0x3f4a...9b2c</div>
+    </div>
+    <div class="layout">
+      <div class="sidebar">
+        <div class="sidebar-section">Filter by Type</div>
+        <div class="sidebar-item active"><span class="s-icon">◉</span>All Assets</div>
+        <div class="sidebar-item"><span class="s-icon">🏢</span>Real Estate</div>
+        <div class="sidebar-item"><span class="s-icon">🏭</span>Industrial</div>
+        <div class="sidebar-item"><span class="s-icon">🏠</span>Residential</div>
+        <div class="sidebar-item"><span class="s-icon">🏨</span>Hospitality</div>
+        <div class="sidebar-section">Price Range</div>
+        <div style="padding:0 12px;">
+          <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">$0 — $5,000,000</div>
+          <div style="height:4px;background:var(--border);border-radius:2px;position:relative;">
+            <div style="position:absolute;left:10%;right:20%;height:4px;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:2px;"></div>
+          </div>
+        </div>
+        <div class="sidebar-section">Sort By</div>
+        <div class="sidebar-item active"><span class="s-icon">↑</span>Highest Value</div>
+        <div class="sidebar-item"><span class="s-icon">⟳</span>Most Recent</div>
+        <div class="sidebar-item"><span class="s-icon">▲</span>Most Holders</div>
+      </div>
+      <div class="main">
+        <div class="page-header">
+          <div><div class="page-title">Marketplace</div><div class="page-sub">Browse tokenized assets available for purchase</div></div>
+          <div style="display:flex;gap:10px;align-items:center;">
+            <input class="form-input" value="Search assets..." style="width:220px;" readonly/>
+            <button class="btn-secondary">⚙ Filter</button>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+          ${[
+            {e:'🏢',n:'Marina Bay Tower A',loc:'Singapore',type:'Real Estate',price:'$2.40',supply:'1,000,000',sold:64,val:'$2.4M',c:'rgba(59,130,246,0.15)',tag:'tag-blue',tl:'Active'},
+            {e:'🏨',n:'Colombo Hilton Suite',loc:'Sri Lanka',type:'Hospitality',price:'$1.96',supply:'500,000',sold:48,val:'$980K',c:'rgba(245,158,11,0.15)',tag:'tag-amber',tl:'Hot'},
+            {e:'🏭',n:'Industrial Warehouse K7',loc:'London, UK',type:'Industrial',price:'$2.33',supply:'750,000',sold:72,val:'$1.75M',c:'rgba(139,92,246,0.15)',tag:'tag-purple',tl:'Partial'},
+            {e:'🏠',n:'Green Valley Villa',loc:'Dubai, UAE',type:'Residential',price:'$2.60',supply:'250,000',sold:30,val:'$650K',c:'rgba(16,185,129,0.15)',tag:'tag-green',tl:'New'},
+            {e:'🏗',n:'Tech Park Block C',loc:'Bangalore, IN',type:'Commercial',price:'$1.80',supply:'2,000,000',sold:15,val:'$3.6M',c:'rgba(239,68,68,0.15)',tag:'tag-red',tl:'IPO'},
+            {e:'🏪',n:'Retail Hub Plaza',loc:'Tokyo, JP',type:'Retail',price:'$3.10',supply:'400,000',sold:55,val:'$1.24M',c:'rgba(59,130,246,0.15)',tag:'tag-blue',tl:'Active'},
+          ].map(a=>`
+            <div class="card" style="cursor:pointer;">
+              <div style="height:100px;background:${a.c};display:flex;align-items:center;justify-content:center;font-size:48px;">${a.e}</div>
+              <div style="padding:16px;">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+                  <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;">${a.n}</div>
+                  <span class="tag ${a.tag}">${a.tl}</span>
+                </div>
+                <div style="font-size:12px;color:var(--muted);margin-bottom:12px;">${a.type} · ${a.loc}</div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+                  <div><div style="font-size:11px;color:var(--muted);">Price/Token</div><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;">${a.price}</div></div>
+                  <div style="text-align:right;"><div style="font-size:11px;color:var(--muted);">Total Value</div><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;">${a.val}</div></div>
+                </div>
+                <div style="margin-bottom:12px;">
+                  <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:4px;"><span>Sold</span><span>${a.sold}%</span></div>
+                  <div style="height:4px;background:var(--border);border-radius:2px;"><div style="width:${a.sold}%;height:4px;border-radius:2px;background:linear-gradient(90deg,var(--accent),var(--accent2));"></div></div>
+                </div>
+                <button class="btn-primary" style="width:100%;justify-content:center;font-size:13px;padding:9px;">Buy Tokens</button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SCREEN 8: PORTFOLIO -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="screen-wrap" id="portfolio">
+  <div class="figma-label">Screen 8 / Portfolio — My Token Holdings</div>
+  <div class="device">
+    <div class="topbar">
+      <div class="logo"><div class="logo-icon">⬡</div>AssetChain</div>
+      <nav class="nav"><a>Dashboard</a><a>My Assets</a><a>Marketplace</a><a class="active">Portfolio</a><a>Transactions</a></nav>
+      <div class="wallet-btn"><div class="wallet-dot"></div>0x3f4a...9b2c</div>
+    </div>
+    <div class="layout">
+      <div class="sidebar">
+        <div class="sidebar-section">Portfolio</div>
+        <div class="sidebar-item active"><span class="s-icon">◉</span>Holdings</div>
+        <div class="sidebar-item"><span class="s-icon">≋</span>History</div>
+        <div class="sidebar-item"><span class="s-icon">⬇</span>Dividends</div>
+        <div class="sidebar-section">Quick Actions</div>
+        <div class="sidebar-item"><span class="s-icon">◑</span>Buy More</div>
+        <div class="sidebar-item"><span class="s-icon">⇄</span>Transfer</div>
+        <div class="sidebar-item"><span class="s-icon">✕</span>Sell Tokens</div>
+      </div>
+      <div class="main">
+        <div class="page-header">
+          <div><div class="page-title">My Portfolio</div><div class="page-sub">Your fractional token holdings across all assets</div></div>
+          <div style="display:flex;gap:10px;"><button class="btn-secondary">⬇ Export CSV</button><button class="btn-primary">◑ Buy More</button></div>
+        </div>
+        <div class="stats-row" style="grid-template-columns:repeat(3,1fr);">
+          <div class="stat-card blue"><div class="stat-icon">◈</div><div class="stat-label">Portfolio Value</div><div class="stat-value">$142,400</div><div class="stat-change">↑ +8.3% this month</div></div>
+          <div class="stat-card green"><div class="stat-icon">⬡</div><div class="stat-label">Total Tokens Held</div><div class="stat-value">59,300</div><div class="stat-change">Across 4 assets</div></div>
+          <div class="stat-card amber"><div class="stat-icon">◑</div><div class="stat-label">Unrealised Gain</div><div class="stat-value">+$11,840</div><div class="stat-change">↑ +9.1% avg</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 320px;gap:20px;">
+          <div class="card">
+            <div class="card-header"><div class="card-title">Token Holdings</div><span class="tag tag-green">4 Assets</span></div>
+            <table class="tx-table">
+              <thead><tr><th>Asset</th><th>Symbol</th><th>Tokens</th><th>Avg Cost</th><th>Current</th><th>Value</th><th>P&L</th></tr></thead>
+              <tbody>
+                <tr><td><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">🏢</span><div><div style="font-weight:600;">Marina Bay Tower A</div><div style="font-size:11px;color:var(--muted);">Real Estate · Singapore</div></div></div></td><td><span style="font-family:'DM Mono',monospace;background:rgba(59,130,246,0.1);padding:3px 8px;border-radius:4px;font-size:12px;">MBT</span></td><td style="font-weight:700;">28,400</td><td style="color:var(--muted);">$2.20</td><td style="font-weight:700;">$2.40</td><td style="font-family:'Syne',sans-serif;font-weight:700;">$68,160</td><td style="color:var(--accent2);font-weight:600;">+$5,680</td></tr>
+                <tr><td><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">🏨</span><div><div style="font-weight:600;">Colombo Hilton Suite</div><div style="font-size:11px;color:var(--muted);">Hospitality · Sri Lanka</div></div></div></td><td><span style="font-family:'DM Mono',monospace;background:rgba(245,158,11,0.1);padding:3px 8px;border-radius:4px;font-size:12px;">CHS</span></td><td style="font-weight:700;">15,200</td><td style="color:var(--muted);">$1.85</td><td style="font-weight:700;">$1.96</td><td style="font-family:'Syne',sans-serif;font-weight:700;">$29,792</td><td style="color:var(--accent2);font-weight:600;">+$1,672</td></tr>
+                <tr><td><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">🏭</span><div><div style="font-weight:600;">Industrial Warehouse K7</div><div style="font-size:11px;color:var(--muted);">Industrial · London</div></div></div></td><td><span style="font-family:'DM Mono',monospace;background:rgba(139,92,246,0.1);padding:3px 8px;border-radius:4px;font-size:12px;">IWK</span></td><td style="font-weight:700;">10,500</td><td style="color:var(--muted);">$2.50</td><td style="font-weight:700;">$2.33</td><td style="font-family:'Syne',sans-serif;font-weight:700;">$24,465</td><td style="color:var(--danger);font-weight:600;">-$1,785</td></tr>
+                <tr><td><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">🏠</span><div><div style="font-weight:600;">Green Valley Villa</div><div style="font-size:11px;color:var(--muted);">Residential · Dubai</div></div></div></td><td><span style="font-family:'DM Mono',monospace;background:rgba(16,185,129,0.1);padding:3px 8px;border-radius:4px;font-size:12px;">GVV</span></td><td style="font-weight:700;">5,200</td><td style="color:var(--muted);">$2.40</td><td style="font-weight:700;">$2.60</td><td style="font-family:'Syne',sans-serif;font-weight:700;">$13,520</td><td style="color:var(--accent2);font-weight:600;">+$1,040</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- DONUT CHART -->
+          <div class="card">
+            <div class="card-header"><div class="card-title">Allocation</div><span class="tag tag-blue">by Value</span></div>
+            <div class="card-body">
+              <div style="text-align:center;margin-bottom:20px;">
+                <svg width="160" height="160" viewBox="0 0 160 160">
+                  <circle cx="80" cy="80" r="60" fill="none" stroke="#1e2d45" stroke-width="24"/>
+                  <circle cx="80" cy="80" r="60" fill="none" stroke="#3B82F6" stroke-width="24" stroke-dasharray="239 138" stroke-dashoffset="0" transform="rotate(-90 80 80)"/>
+                  <circle cx="80" cy="80" r="60" fill="none" stroke="#10B981" stroke-width="24" stroke-dasharray="112 265" stroke-dashoffset="-239" transform="rotate(-90 80 80)"/>
+                  <circle cx="80" cy="80" r="60" fill="none" stroke="#8B5CF6" stroke-width="24" stroke-dasharray="92 285" stroke-dashoffset="-351" transform="rotate(-90 80 80)"/>
+                  <circle cx="80" cy="80" r="60" fill="none" stroke="#F59E0B" stroke-width="24" stroke-dasharray="51 326" stroke-dashoffset="-443" transform="rotate(-90 80 80)"/>
+                  <text x="80" y="75" text-anchor="middle" fill="#E8EDF5" font-family="Syne" font-size="18" font-weight="800">$142K</text>
+                  <text x="80" y="95" text-anchor="middle" fill="#6B7FA3" font-family="DM Sans" font-size="11">Total</text>
+                </svg>
+              </div>
+              <div class="donut-legend">
+                <div class="legend-item"><div class="legend-dot" style="background:var(--accent);"></div><div class="legend-name" style="font-size:12px;">Marina Bay Tower</div><div class="legend-pct" style="color:var(--accent);">47.9%</div></div>
+                <div class="legend-item"><div class="legend-dot" style="background:var(--accent2);"></div><div class="legend-name" style="font-size:12px;">Colombo Hilton</div><div class="legend-pct" style="color:var(--accent2);">20.9%</div></div>
+                <div class="legend-item"><div class="legend-dot" style="background:var(--accent4);"></div><div class="legend-name" style="font-size:12px;">Industrial WH K7</div><div class="legend-pct" style="color:var(--accent4);">17.2%</div></div>
+                <div class="legend-item"><div class="legend-dot" style="background:var(--accent3);"></div><div class="legend-name" style="font-size:12px;">Green Valley Villa</div><div class="legend-pct" style="color:var(--accent3);">9.5%</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SCREEN 9: TOP HOLDERS -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="screen-wrap" id="topholders">
+  <div class="figma-label">Screen 9 / Top 10 Beneficiaries — Full Analytics View</div>
+  <div class="device">
+    <div class="topbar">
+      <div class="logo"><div class="logo-icon">⬡</div>AssetChain</div>
+      <nav class="nav"><a>Dashboard</a><a>My Assets</a><a>Marketplace</a><a>Portfolio</a><a class="active">Analytics</a></nav>
+      <div class="wallet-btn"><div class="wallet-dot"></div>0x3f4a...9b2c</div>
+    </div>
+    <div class="layout">
+      <div class="sidebar">
+        <div class="sidebar-section">Analytics</div>
+        <div class="sidebar-item active"><span class="s-icon">▲</span>Top Holders</div>
+        <div class="sidebar-item"><span class="s-icon">≋</span>All Transactions</div>
+        <div class="sidebar-item"><span class="s-icon">◈</span>Asset Count</div>
+        <div class="sidebar-item"><span class="s-icon">▦</span>Token Distribution</div>
+      </div>
+      <div class="main">
+        <div class="page-header">
+          <div><div class="page-title">Top 10 Beneficiaries</div><div class="page-sub">Addresses holding the most tokens across all assets</div></div>
+          <div style="display:flex;gap:10px;"><button class="btn-secondary">⬇ Export</button><select class="form-select" style="width:200px;"><option>All Assets</option></select></div>
+        </div>
+        <div class="stats-row" style="grid-template-columns:repeat(3,1fr);">
+          <div class="stat-card blue"><div class="stat-icon">▲</div><div class="stat-label">Top Holder Balance</div><div class="stat-value">284,500</div><div class="stat-change">0x3f4a...9b2c</div></div>
+          <div class="stat-card green"><div class="stat-icon">⬡</div><div class="stat-label">Combined (Top 10)</div><div class="stat-value">1.29M</div><div class="stat-change">53.8% of supply</div></div>
+          <div class="stat-card purple"><div class="stat-icon">◉</div><div class="stat-label">Unique Holders</div><div class="stat-value">347</div><div class="stat-change">↑ +28 this week</div></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">Top 10 Token Holders</div><span class="tag tag-green">Live Data</span></div>
+          <table class="tx-table">
+            <thead><tr><th>Rank</th><th>Address</th><th>MBT</th><th>CHS</th><th>IWK</th><th>GVV</th><th>Total Tokens</th><th>% of Supply</th><th>Value</th></tr></thead>
+            <tbody>
+              ${[
+                {r:1,a:'0x3f4a...9b2c',m:'128K',c:'62K',i:'54K',g:'40K',t:'284,500',p:'11.9%',v:'$682K'},
+                {r:2,a:'0x8c1d...4e7f',m:'98K',c:'48K',i:'38K',g:'26K',t:'210,300',p:'8.8%',v:'$504K'},
+                {r:3,a:'0x2b9e...7a1d',m:'82K',c:'40K',i:'32K',g:'24K',t:'178,200',p:'7.4%',v:'$427K'},
+                {r:4,a:'0x5f2c...3b8a',m:'64K',c:'32K',i:'26K',g:'20K',t:'142,100',p:'5.9%',v:'$341K'},
+                {r:5,a:'0x9d4f...6c2e',m:'54K',c:'26K',i:'22K',g:'17K',t:'118,900',p:'5.0%',v:'$285K'},
+                {r:6,a:'0x1a7b...0f5d',m:'44K',c:'22K',i:'18K',g:'14K',t:'97,400',p:'4.1%',v:'$234K'},
+                {r:7,a:'0x6e3d...2c9b',m:'38K',c:'19K',i:'16K',g:'11K',t:'84,200',p:'3.5%',v:'$202K'},
+                {r:8,a:'0x4c8a...1d6f',m:'32K',c:'16K',i:'14K',g:'10K',t:'71,500',p:'3.0%',v:'$172K'},
+                {r:9,a:'0x7f1e...9a4c',m:'26K',c:'14K',i:'11K',g:'7K',t:'58,300',p:'2.4%',v:'$140K'},
+                {r:10,a:'0x0b5d...7e2a',m:'20K',c:'10K',i:'9K',g:'5K',t:'44,100',p:'1.8%',v:'$106K'},
+              ].map(h=>`<tr>
+                <td><div class="rank ${h.r<=3?'rank-'+h.r:'rank-n'}">${h.r}</div></td>
+                <td style="font-family:'DM Mono',monospace;font-size:12px;">${h.a}</td>
+                <td style="color:var(--accent);font-weight:600;">${h.m}</td>
+                <td style="color:var(--accent3);font-weight:600;">${h.c}</td>
+                <td style="color:var(--accent4);font-weight:600;">${h.i}</td>
+                <td style="color:var(--accent2);font-weight:600;">${h.g}</td>
+                <td style="font-family:'Syne',sans-serif;font-weight:800;">${h.t}</td>
+                <td><div style="display:flex;align-items:center;gap:8px;"><div style="width:60px;height:4px;background:var(--border);border-radius:2px;"><div style="width:${parseFloat(h.p)}%;max-width:100%;height:4px;border-radius:2px;background:var(--accent);"></div></div>${h.p}</div></td>
+                <td style="color:var(--accent2);font-weight:600;">${h.v}</td>
+              </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SCREEN 10: NOTIFICATIONS -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="screen-wrap" id="notifications">
+  <div class="figma-label">Screen 10 / Notifications — Alerts & Activity Feed</div>
+  <div class="device" style="max-width:800px;">
+    <div class="topbar">
+      <div class="logo"><div class="logo-icon">⬡</div>AssetChain</div>
+      <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;">Notifications</div>
+      <div style="display:flex;gap:10px;"><button class="btn-secondary" style="font-size:13px;padding:8px 14px;">Mark all read</button><div class="wallet-btn"><div class="wallet-dot"></div>0x3f4a...9b2c</div></div>
+    </div>
+    <div style="padding:32px;">
+      <div class="card">
+        <div class="card-header"><div class="card-title">Recent Alerts</div><span class="tag tag-red">3 Unread</span></div>
+        <div style="padding:0 24px;">
+          ${[
+            {ic:'⬡',c:'rgba(59,130,246,0.15)',icol:'#3B82F6',t:'Token Purchase Confirmed',s:'10,000 MBT purchased successfully · Block #937,219',tm:'2m ago',u:true},
+            {ic:'▲',c:'rgba(245,158,11,0.15)',icol:'#F59E0B',t:'You entered Top 10 Holders',s:'Your wallet 0x3f4a...9b2c is now ranked #1 for MBT',tm:'18m ago',u:true},
+            {ic:'⇄',c:'rgba(16,185,129,0.15)',icol:'#10B981',t:'Transfer Received',s:'5,000 GVV tokens received from 0x5f2c...3b8a',tm:'1h ago',u:true},
+            {ic:'◈',c:'rgba(139,92,246,0.15)',icol:'#8B5CF6',t:'Asset Tokenized',s:'Industrial Warehouse K7 (IWK) is now live on the marketplace',tm:'3h ago',u:false},
+            {ic:'⛽',c:'rgba(107,127,163,0.15)',icol:'#6B7FA3',t:'Gas Price Alert',s:'Ethereum gas dropped to 12 gwei — good time to transact',tm:'5h ago',u:false},
+            {ic:'✓',c:'rgba(16,185,129,0.15)',icol:'#10B981',t:'Asset Definition Confirmed',s:'Green Valley Villa (GVV) successfully defined on-chain',tm:'1d ago',u:false},
+          ].map(n=>`
+            <div class="notif-item" style="${n.u?'background:rgba(59,130,246,0.03);margin:0 -24px;padding:14px 24px;':''}">
+              <div class="notif-icon" style="background:${n.c};color:${n.icol};">${n.ic}</div>
+              <div class="notif-content">
+                <div class="notif-title">${n.t}${n.u?`<span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);margin-left:8px;vertical-align:middle;"></span>`:''}</div>
+                <div class="notif-sub">${n.s}</div>
+              </div>
+              <div class="notif-time">${n.tm}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SCREEN 11: PROFILE -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="screen-wrap" id="profile">
+  <div class="figma-label">Screen 11 / Profile — Account Settings</div>
+  <div class="device" style="max-width:900px;">
+    <div class="topbar">
+      <div class="logo"><div class="logo-icon">⬡</div>AssetChain</div>
+      <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;">My Profile</div>
+      <div class="wallet-btn"><div class="wallet-dot"></div>0x3f4a...9b2c</div>
+    </div>
+    <div style="padding:32px;display:grid;grid-template-columns:280px 1fr;gap:24px;">
+      <!-- PROFILE CARD -->
+      <div>
+        <div class="card" style="text-align:center;padding:32px 24px;">
+          <div style="display:flex;justify-content:center;margin-bottom:16px;">
+            <div class="profile-avatar">A</div>
+          </div>
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:20px;">Ashan Perera</div>
+          <div style="font-size:13px;color:var(--muted);margin-bottom:4px;">ashan@assetchain.io</div>
+          <div style="font-size:12px;font-family:'DM Mono',monospace;color:var(--accent);margin-bottom:20px;">Asset Owner / Issuer</div>
+          <div style="background:var(--surface2);border-radius:10px;padding:12px;margin-bottom:16px;">
+            <div style="font-size:11px;color:var(--muted);margin-bottom:4px;font-family:'DM Mono',monospace;">WALLET ADDRESS</div>
+            <div style="font-size:12px;font-family:'DM Mono',monospace;color:var(--text);">0x3f4a8c2d...9b2c</div>
+          </div>
+          <div style="display:flex;justify-content:space-around;margin-bottom:20px;">
+            <div style="text-align:center;"><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:20px;">4</div><div style="font-size:11px;color:var(--muted);">Assets</div></div>
+            <div style="text-align:center;"><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:20px;">59K</div><div style="font-size:11px;color:var(--muted);">Tokens</div></div>
+            <div style="text-align:center;"><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:20px;">#1</div><div style="font-size:11px;color:var(--muted);">Rank</div></div>
+          </div>
+          <button class="btn-outline" style="width:100%;justify-content:center;">Edit Profile</button>
+        </div>
+      </div>
+      <!-- SETTINGS -->
+      <div class="card">
+        <div class="card-header"><div class="card-title">Account Settings</div><button class="btn-primary" style="font-size:13px;padding:8px 16px;">Save Changes</button></div>
+        <div class="card-body">
+          <div style="font-size:13px;color:var(--accent);font-family:'DM Mono',monospace;margin-bottom:16px;text-transform:uppercase;">Personal Information</div>
+          <div class="form-row"><div class="form-group"><label class="form-label">First Name</label><input class="form-input" value="Ashan" readonly/></div><div class="form-group"><label class="form-label">Last Name</label><input class="form-input" value="Perera" readonly/></div></div>
+          <div class="form-group"><label class="form-label">Email Address</label><input class="form-input" value="ashan@assetchain.io" readonly/></div>
+          <div style="font-size:13px;color:var(--accent);font-family:'DM Mono',monospace;margin:24px 0 16px;text-transform:uppercase;">Blockchain Settings</div>
+          <div class="form-group"><label class="form-label">Connected Wallet</label><input class="form-input" value="0x3f4a8c2d...9b2c" readonly style="font-family:'DM Mono',monospace;"/></div>
+          <div class="form-group"><label class="form-label">Preferred Network</label><select class="form-select"><option>Ethereum Mainnet</option></select></div>
+          <div style="font-size:13px;color:var(--accent);font-family:'DM Mono',monospace;margin:24px 0 16px;text-transform:uppercase;">Notification Preferences</div>
+          ${[['Transaction Confirmations','Receive alerts when tokens are sent/received'],['Price Alerts','Notify when token price changes by ±10%'],['Top 10 Rank Changes','Alert when your rank in top holders changes'],['New Asset Listings','Notify about new assets on the marketplace']].map(([l,s])=>`
+            <div class="profile-field">
+              <div><div style="font-size:13px;font-weight:600;">${l}</div><div style="font-size:12px;color:var(--muted);">${s}</div></div>
+              <div style="width:44px;height:24px;background:var(--accent);border-radius:12px;position:relative;cursor:pointer;flex-shrink:0;"><div style="position:absolute;right:3px;top:3px;width:18px;height:18px;background:white;border-radius:50%;"></div></div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- DESIGN SYSTEM -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="system">
+  <div class="figma-label" style="max-width:1280px;margin:0 auto 10px;">Design System — Colour Palette, Typography & Components</div>
+  <div class="comp-panel">
+    <div class="comp-title">Colour Palette</div>
+    <div style="display:grid;grid-template-columns:repeat(8,1fr);gap:12px;">
+      ${[{c:'#0A0E1A',n:'Background'},{c:'#111827',n:'Surface'},{c:'#1a2235',n:'Surface 2'},{c:'#1e2d45',n:'Border'},{c:'#6B7FA3',n:'Muted'},{c:'#3B82F6',n:'Accent Blue'},{c:'#10B981',n:'Accent Green'},{c:'#F59E0B',n:'Accent Amber'},{c:'#8B5CF6',n:'Accent Purple'},{c:'#EF4444',n:'Danger Red'},{c:'#E8EDF5',n:'Text Primary'},{c:'#141E30',n:'Card BG'}].slice(0,8).map(s=>`<div><div style="height:48px;border-radius:8px;background:${s.c};border:1px solid #333;margin-bottom:6px;"></div><div style="font-family:'DM Mono',monospace;font-size:10px;color:#888;">${s.c}</div><div style="font-family:'DM Mono',monospace;font-size:10px;color:#666;">${s.n}</div></div>`).join('')}
+    </div>
+  </div>
+  <div class="typo-section">
+    <div><div style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:#E8EDF5;">Syne 800</div><div style="font-family:'DM Mono',monospace;font-size:10px;color:#666;margin-top:6px;">Display / Headings · Page Titles · Values</div></div>
+    <div><div style="font-family:'DM Sans',sans-serif;font-size:18px;color:#E8EDF5;">DM Sans Regular</div><div style="font-family:'DM Mono',monospace;font-size:10px;color:#666;margin-top:6px;">Body Text · Labels · Descriptions · UI</div></div>
+    <div><div style="font-family:'DM Mono',monospace;font-size:15px;color:#E8EDF5;">DM Mono 400</div><div style="font-family:'DM Mono',monospace;font-size:10px;color:#666;margin-top:6px;">Addresses · Hashes · Code · Tags</div></div>
+  </div>
+  <div class="comp-panel">
+    <div class="comp-title">Buttons & Components</div>
+    <div class="comp-row">
+      <div class="comp-item"><button class="btn-primary">Primary</button><div class="comp-label">btn-primary</div></div>
+      <div class="comp-item"><button class="btn-secondary">Secondary</button><div class="comp-label">btn-secondary</div></div>
+      <div class="comp-item"><button class="btn-primary" style="background:var(--accent2);">Success</button><div class="comp-label">btn-success</div></div>
+      <div class="comp-item"><button class="btn-primary" style="background:var(--danger);">Danger</button><div class="comp-label">btn-danger</div></div>
+      <div class="comp-item"><button class="btn-outline">Outline</button><div class="comp-label">btn-outline</div></div>
+      <div class="comp-item"><span class="tag tag-blue">Active</span><div class="comp-label">tag-blue</div></div>
+      <div class="comp-item"><span class="tag tag-green">Live</span><div class="comp-label">tag-green</div></div>
+      <div class="comp-item"><span class="tag tag-amber">Pending</span><div class="comp-label">tag-amber</div></div>
+      <div class="comp-item"><span class="tag tag-purple">IPO</span><div class="comp-label">tag-purple</div></div>
+      <div class="comp-item"><span class="tag tag-red">Unread</span><div class="comp-label">tag-red</div></div>
+      <div class="comp-item"><div class="wallet-btn"><div class="wallet-dot"></div>0x3f4a...9b2c</div><div class="comp-label">wallet-btn</div></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end figma-bg -->
+
+<script>
+  // Smooth scroll nav
+  document.querySelectorAll('.page-nav a').forEach(a => {
+    a.addEventListener('click', () => {
+      document.querySelectorAll('.page-nav a').forEach(x => x.classList.remove('active'));
+      a.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
