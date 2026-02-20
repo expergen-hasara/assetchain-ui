@@ -4,17 +4,25 @@
     <div class="logo-icon">⬡</div>
     AssetChain
   </a>
+
+  <!-- Desktop nav (hidden on tablet/mobile) -->
   <nav class="nav">
-    <a href="/dashboard"   class="{% if active=='dashboard' %}active{% endif %}">Dashboard</a>
-    <a href="/marketplace" class="{% if active=='marketplace' %}active{% endif %}">Marketplace</a>
-    <a href="/portfolio"   class="{% if active=='portfolio' %}active{% endif %}">Portfolio</a>
+    <a href="/dashboard"    class="{% if active=='dashboard' %}active{% endif %}">Dashboard</a>
+    <a href="/marketplace"  class="{% if active=='marketplace' %}active{% endif %}">Marketplace</a>
+    <a href="/portfolio"    class="{% if active=='portfolio' %}active{% endif %}">Portfolio</a>
     <a href="/transactions" class="{% if active=='transactions' %}active{% endif %}">Transactions</a>
-    <a href="/top-holders" class="{% if active=='top_holders' %}active{% endif %}">Analytics</a>
+    <a href="/top-holders"  class="{% if active=='top_holders' %}active{% endif %}">Analytics</a>
   </nav>
+
   {% if user %}
   <a href="/profile" class="wallet-btn">
     <div class="wallet-dot"></div>
-    {{ user.wallet[:14] if user.wallet != 'Not connected' else '🦊 Connect Wallet' }}
+    <span class="wallet-addr-text">{{ user.wallet[:14] if user.wallet != 'Not connected' else '🦊 Connect' }}</span>
   </a>
   {% endif %}
+
+  <!-- Hamburger button (shown on tablet/mobile) -->
+  <button class="hamburger" id="hamburger" onclick="toggleSidebar()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </div>

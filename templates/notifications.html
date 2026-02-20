@@ -12,11 +12,11 @@
     <div style="max-width:800px;">
       <div class="card">
         <div class="card-header"><div class="card-title">Recent Alerts</div><span class="tag tag-red">{{ unread_count }} Unread</span></div>
-        <div style="padding:0 24px;">
+        <div style="padding:0 20px;">
           {% for n in notifications %}
-          <div class="notif-item" style="{% if n.unread %}background:rgba(59,130,246,.03);margin:0 -24px;padding:14px 24px;{% endif %}">
+          <div class="notif-item" style="{% if n.unread %}background:rgba(59,130,246,.03);margin:0 -20px;padding:14px 20px;{% endif %}">
             <div class="notif-icon" style="background:{{ n.color }};color:{{ n.icon_color }};">{{ n.icon }}</div>
-            <div class="notif-content" style="flex:1;">
+            <div style="flex:1;min-width:0;">
               <div class="notif-title">
                 {{ n.title }}
                 {% if n.unread %}<span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);margin-left:8px;vertical-align:middle;"></span>{% endif %}

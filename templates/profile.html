@@ -9,7 +9,7 @@
       <div><div class="page-title">My Profile</div><div class="page-sub">Manage your account and preferences</div></div>
     </div>
     {% if success %}<div class="alert alert-success">{{ success }}</div>{% endif %}
-    <div style="display:grid;grid-template-columns:280px 1fr;gap:24px;">
+    <div class="profile-grid">
       <!-- PROFILE CARD -->
       <div class="card" style="text-align:center;padding:32px 24px;height:fit-content;">
         <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent4));display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 16px;">
@@ -20,7 +20,7 @@
         <div style="font-size:12px;font-family:'DM Mono',monospace;color:var(--accent);margin-bottom:20px;">{{ user.role }}</div>
         <div style="background:var(--surface2);border-radius:10px;padding:12px;margin-bottom:16px;">
           <div style="font-size:11px;color:var(--muted);margin-bottom:4px;font-family:'DM Mono',monospace;">WALLET</div>
-          <div style="font-size:12px;font-family:'DM Mono',monospace;">{{ user.wallet }}</div>
+          <div style="font-size:11px;font-family:'DM Mono',monospace;overflow-wrap:break-word;">{{ user.wallet }}</div>
         </div>
         <div style="display:flex;justify-content:space-around;margin-bottom:20px;">
           <div style="text-align:center;"><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:20px;">{{ total_assets }}</div><div style="font-size:11px;color:var(--muted);">Assets</div></div>
@@ -48,9 +48,9 @@
           </form>
           <div style="font-size:13px;color:var(--accent);font-family:'DM Mono',monospace;margin:20px 0 16px;text-transform:uppercase;">Notification Preferences</div>
           {% for label, sub in [('Transaction Confirmations','Alert when tokens are sent/received'),('Price Alerts','Notify on ±10% price changes'),('Top 10 Rank Changes','Alert on holder rank changes'),('New Asset Listings','Notify about new marketplace listings')] %}
-          <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.04);">
-            <div><div style="font-size:13px;font-weight:600;">{{ label }}</div><div style="font-size:12px;color:var(--muted);">{{ sub }}</div></div>
-            <div style="width:44px;height:24px;background:var(--accent);border-radius:12px;position:relative;cursor:pointer;">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.04);gap:12px;">
+            <div style="min-width:0;"><div style="font-size:13px;font-weight:600;">{{ label }}</div><div style="font-size:12px;color:var(--muted);">{{ sub }}</div></div>
+            <div style="width:44px;height:24px;background:var(--accent);border-radius:12px;position:relative;cursor:pointer;flex-shrink:0;">
               <div style="position:absolute;right:3px;top:3px;width:18px;height:18px;background:white;border-radius:50%;"></div>
             </div>
           </div>
@@ -60,4 +60,8 @@
     </div>
   </div>
 </div>
+<style>
+.profile-grid{display:grid;grid-template-columns:280px 1fr;gap:24px;}
+@media(max-width:900px){.profile-grid{grid-template-columns:1fr;}}
+</style>
 {% endblock %}

@@ -15,38 +15,15 @@
         <a href="/define-asset" class="btn btn-primary">＋ New Asset</a>
       </div>
     </div>
-
-    <!-- STATS -->
     <div class="stats-row stats-4">
-      <div class="stat-card stat-blue">
-        <div class="stat-icon">◈</div>
-        <div class="stat-label">Total Assets Created</div>
-        <div class="stat-value">{{ stats.total_assets }}</div>
-        <div class="stat-change">↑ +3 this month</div>
-      </div>
-      <div class="stat-card stat-green">
-        <div class="stat-icon">⬡</div>
-        <div class="stat-label">Tokens in Circulation</div>
-        <div class="stat-value">{{ "{:,.0f}".format(stats.total_tokens / 1000) }}K</div>
-        <div class="stat-change">↑ +12.4%</div>
-      </div>
-      <div class="stat-card stat-amber">
-        <div class="stat-icon">◑</div>
-        <div class="stat-label">Total Asset Value</div>
-        <div class="stat-value">${{ "{:,.0f}".format(stats.total_value / 1000000) }}M</div>
-        <div class="stat-change">↑ +5.8% this week</div>
-      </div>
-      <div class="stat-card stat-purple">
-        <div class="stat-icon">▲</div>
-        <div class="stat-label">Unique Token Holders</div>
-        <div class="stat-value">{{ stats.unique_holders }}</div>
-        <div class="stat-change">↑ +28 new holders</div>
-      </div>
+      <div class="stat-card stat-blue"><div class="stat-icon">◈</div><div class="stat-label">Total Assets Created</div><div class="stat-value">{{ stats.total_assets }}</div><div class="stat-change">↑ +3 this month</div></div>
+      <div class="stat-card stat-green"><div class="stat-icon">⬡</div><div class="stat-label">Tokens in Circulation</div><div class="stat-value">{{ "{:,.0f}".format(stats.total_tokens / 1000) }}K</div><div class="stat-change">↑ +12.4%</div></div>
+      <div class="stat-card stat-amber"><div class="stat-icon">◑</div><div class="stat-label">Total Asset Value</div><div class="stat-value">${{ "{:,.0f}".format(stats.total_value / 1000000) }}M</div><div class="stat-change">↑ +5.8% this week</div></div>
+      <div class="stat-card stat-purple"><div class="stat-icon">▲</div><div class="stat-label">Unique Token Holders</div><div class="stat-value">{{ stats.unique_holders }}</div><div class="stat-change">↑ +28 new holders</div></div>
     </div>
-
-    <div style="display:grid;grid-template-columns:1fr 360px;gap:20px;">
-
-      <!-- ACTIVE ASSETS -->
+    
+    <!-- col-2-right: 1fr 340px → stacks to 1fr on tablet/mobile -->
+    <div class="col-2-right">
       <div class="card">
         <div class="card-header">
           <div class="card-title">Active Assets</div>
@@ -56,21 +33,17 @@
         <a href="/marketplace" style="text-decoration:none;color:inherit;">
           <div class="asset-item">
             <div class="asset-thumb" style="background:{{ asset.color }}22;">{{ asset.emoji }}</div>
-            <div style="flex:1;">
-              <div style="font-weight:600;font-size:14px;">{{ asset.name }}</div>
-              <div style="font-size:12px;color:var(--muted);">{{ asset.type }} · {{ asset.location }} · {{ "{:,}".format(asset.supply) }} tokens</div>
+            <div style="flex:1;min-width:0;">
+              <div style="font-weight:600;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ asset.name }}</div>
+              <div style="font-size:12px;color:var(--muted);">{{ asset.type }} · {{ asset.location }}</div>
             </div>
-            <div style="text-align:right;">
+            <div style="text-align:right;flex-shrink:0;">
               <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;">${{ "{:,.0f}".format(asset.valuation) }}</div>
-              <div style="font-size:12px;color:{% if asset.status=='Active' %}var(--accent2){% elif asset.status=='Partial' %}var(--accent3){% else %}var(--accent){% endif %};">
-                ● {{ asset.status }}
-              </div>
+              <div style="font-size:12px;color:{% if asset.status=='Active' %}var(--accent2){% elif asset.status=='Partial' %}var(--accent3){% else %}var(--accent){% endif %};">● {{ asset.status }}</div>
             </div>
           </div>
         </a>
         {% endfor %}
-
-        <!-- CHART -->
         <div style="padding:20px 24px;border-top:1px solid var(--border);">
           <div style="font-size:12px;color:var(--muted);margin-bottom:12px;font-family:'DM Mono',monospace;">ASSETS CREATED PER MONTH</div>
           <div class="chart-area">
@@ -83,8 +56,6 @@
           </div>
         </div>
       </div>
-
-      <!-- TOP HOLDERS -->
       <div class="card">
         <div class="card-header">
           <div class="card-title">Top 10 Beneficiaries</div>
@@ -94,46 +65,36 @@
           {% for h in top_holders %}
           <div class="lb-item">
             <div class="rank rank-{{ h.rank if h.rank <= 3 else 'n' }}">{{ h.rank }}</div>
-            <div style="font-family:'DM Mono',monospace;font-size:12px;flex:1;">{{ h.address }}</div>
-            <div style="width:60px;height:4px;background:var(--border);border-radius:2px;margin-right:10px;">
-              <div style="width:{{ (h.rank|string|int) * 10 if h.rank <= 10 else 100 }}%;max-width:100%;height:4px;border-radius:2px;background:linear-gradient(90deg,var(--accent),var(--accent2));"></div>
-            </div>
-            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--accent2);">{{ h.total }}</div>
+            <div style="font-family:'DM Mono',monospace;font-size:11px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ h.address }}</div>
+            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:12px;color:var(--accent2);flex-shrink:0;">{{ h.total }}</div>
           </div>
           {% endfor %}
         </div>
       </div>
     </div>
-
-    <!-- RECENT TRANSACTIONS -->
     <div class="card">
       <div class="card-header">
         <div class="card-title">Recent Transactions</div>
         <a href="/transactions" class="tag tag-amber" style="text-decoration:none;">View All →</a>
       </div>
-      <table class="tx-table">
-        <thead>
-          <tr>
-            <th>Type</th><th>Asset</th><th>From</th><th>To</th><th>Tokens</th><th>Value</th><th>Time</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for tx in transactions %}
-          <tr>
-            <td><span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;">
-              <span style="width:6px;height:6px;border-radius:50%;background:{{ tx.type_color }};display:inline-block;"></span>
-              {{ tx.type }}
-            </span></td>
-            <td style="font-weight:500;">{{ tx.asset }}</td>
-            <td style="font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);">{{ tx.from_addr }}</td>
-            <td style="font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);">{{ tx.to_addr }}</td>
-            <td style="font-family:'Syne',sans-serif;font-weight:700;">{{ tx.tokens }}</td>
-            <td style="color:{{ tx.type_color }};font-weight:600;">{{ tx.value }}</td>
-            <td style="color:var(--muted);font-size:12px;">{{ tx.time }}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+      <div class="table-scroll">
+        <table class="tx-table">
+          <thead><tr><th>Type</th><th>Asset</th><th>From</th><th>To</th><th>Tokens</th><th>Value</th><th>Time</th></tr></thead>
+          <tbody>
+            {% for tx in transactions %}
+            <tr>
+              <td><span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;"><span style="width:6px;height:6px;border-radius:50%;background:{{ tx.type_color }};display:inline-block;"></span>{{ tx.type }}</span></td>
+              <td style="font-weight:500;">{{ tx.asset }}</td>
+              <td style="font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);">{{ tx.from_addr }}</td>
+              <td style="font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);">{{ tx.to_addr }}</td>
+              <td style="font-family:'Syne',sans-serif;font-weight:700;">{{ tx.tokens }}</td>
+              <td style="color:{{ tx.type_color }};font-weight:600;">{{ tx.value }}</td>
+              <td style="color:var(--muted);font-size:12px;">{{ tx.time }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>

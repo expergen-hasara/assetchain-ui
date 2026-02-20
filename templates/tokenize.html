@@ -9,7 +9,7 @@
       <div><div class="page-title">Tokenize Asset</div><div class="page-sub">Mint ERC-20 tokens representing fractional ownership</div></div>
       <span class="tag tag-green">Step 2 of 2</span>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 360px;gap:24px;">
+    <div class="col-2-right">
       <div class="card">
         <div class="card-header"><div class="card-title">⬡ Token Configuration</div></div>
         <div class="card-body">
@@ -32,7 +32,7 @@
             </div>
             <div style="background:var(--surface2);border-radius:10px;padding:14px;margin-bottom:16px;">
               <div style="font-size:12px;color:var(--muted);margin-bottom:8px;font-family:'DM Mono',monospace;">TOKEN STANDARD</div>
-              <div style="display:flex;gap:10px;">
+              <div style="display:flex;gap:8px;flex-wrap:wrap;">
                 <div style="background:rgba(59,130,246,.15);border:1px solid var(--accent);border-radius:8px;padding:8px 14px;font-size:13px;font-weight:600;color:var(--accent);">ERC-20</div>
                 <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 14px;font-size:13px;color:var(--muted);">ERC-721</div>
                 <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 14px;font-size:13px;color:var(--muted);">ERC-1155</div>
@@ -42,20 +42,18 @@
           </form>
         </div>
       </div>
-      <div>
-        <div class="card">
-          <div class="card-header"><div class="card-title">Active Token Distributions</div></div>
-          {% for a in assets[:4] %}{% if a.supply > 0 %}
-          <div style="padding:14px 20px;border-bottom:1px solid var(--border);">
-            <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
-              <div style="font-size:13px;font-weight:600;">{{ a.symbol }}</div>
-              <div style="font-size:12px;color:var(--accent2);">{{ "{:,}".format(a.sold) }} / {{ "{:,}".format(a.supply) }}</div>
-            </div>
-            <div class="progress-bar"><div class="progress-fill" style="width:{{ (a.sold / a.supply * 100)|int }}%;"></div></div>
-            <div style="font-size:11px;color:var(--muted);margin-top:4px;">{{ (a.sold / a.supply * 100)|int }}% distributed · ${{ "{:.2f}".format(a.price) }}/token</div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Active Token Distributions</div></div>
+        {% for a in assets[:4] %}{% if a.supply > 0 %}
+        <div style="padding:14px 20px;border-bottom:1px solid var(--border);">
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+            <div style="font-size:13px;font-weight:600;">{{ a.symbol }}</div>
+            <div style="font-size:12px;color:var(--accent2);">{{ "{:,}".format(a.sold) }} / {{ "{:,}".format(a.supply) }}</div>
           </div>
-          {% endif %}{% endfor %}
+          <div class="progress-bar"><div class="progress-fill" style="width:{{ (a.sold / a.supply * 100)|int }}%;"></div></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px;">{{ (a.sold / a.supply * 100)|int }}% distributed · ${{ "{:.2f}".format(a.price) }}/token</div>
         </div>
+        {% endif %}{% endfor %}
       </div>
     </div>
   </div>

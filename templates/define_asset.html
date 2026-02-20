@@ -9,7 +9,8 @@
       <div><div class="page-title">Define New Asset</div><div class="page-sub">Register a real-world asset permanently on the blockchain</div></div>
       <span class="tag tag-blue">Step 1 of 2</span>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 360px;gap:24px;">
+    <!-- responsive: side panel drops below form on tablet -->
+    <div class="col-2-right">
       <div class="card">
         <div class="card-header"><div class="card-title">◈ Asset Details</div></div>
         <div class="card-body">
@@ -34,14 +35,13 @@
           </form>
         </div>
       </div>
-      <!-- RIGHT PANEL -->
       <div>
         <div class="card" style="margin-bottom:16px;">
           <div class="card-header"><div class="card-title">All Defined Assets</div><span class="tag tag-blue">{{ assets|length }}</span></div>
           {% for a in assets[:5] %}
           <div class="asset-item">
             <div class="asset-thumb" style="background:{{ a.color }}22;">{{ a.emoji }}</div>
-            <div style="flex:1;"><div style="font-size:13px;font-weight:600;">{{ a.name }}</div><div style="font-size:11px;color:var(--muted);">{{ a.id }} · {{ a.type }}</div></div>
+            <div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ a.name }}</div><div style="font-size:11px;color:var(--muted);">{{ a.id }} · {{ a.type }}</div></div>
             <span class="tag tag-{% if a.status=='Active' %}green{% elif a.status=='IPO' %}red{% else %}amber{% endif %}">{{ a.status }}</span>
           </div>
           {% endfor %}

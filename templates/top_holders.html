@@ -16,31 +16,33 @@
     </div>
     <div class="card">
       <div class="card-header"><div class="card-title">Top 10 Token Holders</div><span class="tag tag-green">Live Data</span></div>
-      <table class="tx-table">
-        <thead><tr><th>Rank</th><th>Address</th><th>MBT</th><th>CHS</th><th>IWK</th><th>GVV</th><th>Total Tokens</th><th>% Supply</th><th>Est. Value</th></tr></thead>
-        <tbody>
-          {% for h in holders %}
-          <tr>
-            <td><div class="rank rank-{{ h.rank if h.rank <= 3 else 'n' }}">{{ h.rank }}</div></td>
-            <td style="font-family:'DM Mono',monospace;font-size:12px;">{{ h.address }}</td>
-            <td style="color:var(--accent);font-weight:600;">{{ h.mbt }}</td>
-            <td style="color:var(--accent3);font-weight:600;">{{ h.chs }}</td>
-            <td style="color:var(--accent4);font-weight:600;">{{ h.iwk }}</td>
-            <td style="color:var(--accent2);font-weight:600;">{{ h.gvv }}</td>
-            <td style="font-family:'Syne',sans-serif;font-weight:800;">{{ h.total }}</td>
-            <td>
-              <div style="display:flex;align-items:center;gap:8px;">
-                <div style="width:60px;height:4px;background:var(--border);border-radius:2px;">
-                  <div style="width:{{ (h.pct|replace('%',''))|float * 8 }}%;max-width:100%;height:4px;border-radius:2px;background:var(--accent);"></div>
+      <div class="table-scroll">
+        <table class="tx-table">
+          <thead><tr><th>Rank</th><th>Address</th><th>MBT</th><th>CHS</th><th>IWK</th><th>GVV</th><th>Total Tokens</th><th>% Supply</th><th>Est. Value</th></tr></thead>
+          <tbody>
+            {% for h in holders %}
+            <tr>
+              <td><div class="rank rank-{{ h.rank if h.rank <= 3 else 'n' }}">{{ h.rank }}</div></td>
+              <td style="font-family:'DM Mono',monospace;font-size:12px;">{{ h.address }}</td>
+              <td style="color:var(--accent);font-weight:600;">{{ h.mbt }}</td>
+              <td style="color:var(--accent3);font-weight:600;">{{ h.chs }}</td>
+              <td style="color:var(--accent4);font-weight:600;">{{ h.iwk }}</td>
+              <td style="color:var(--accent2);font-weight:600;">{{ h.gvv }}</td>
+              <td style="font-family:'Syne',sans-serif;font-weight:800;">{{ h.total }}</td>
+              <td>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <div style="width:50px;height:4px;background:var(--border);border-radius:2px;flex-shrink:0;">
+                    <div style="width:{{ (h.pct|replace('%',''))|float * 8 }}%;max-width:100%;height:4px;border-radius:2px;background:var(--accent);"></div>
+                  </div>
+                  {{ h.pct }}
                 </div>
-                {{ h.pct }}
-              </div>
-            </td>
-            <td style="color:var(--accent2);font-weight:600;">{{ h.value }}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+              </td>
+              <td style="color:var(--accent2);font-weight:600;">{{ h.value }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>

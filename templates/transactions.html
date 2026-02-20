@@ -11,23 +11,25 @@
     </div>
     <div class="card">
       <div class="card-header"><div class="card-title">Transaction History</div><span class="tag tag-blue">{{ transactions|length }} records</span></div>
-      <table class="tx-table">
-        <thead><tr><th>Type</th><th>Asset</th><th>From</th><th>To</th><th>Tokens</th><th>Value</th><th>TX Hash</th><th>Time</th></tr></thead>
-        <tbody>
-          {% for tx in transactions %}
-          <tr>
-            <td><span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;"><span style="width:6px;height:6px;border-radius:50%;background:{{ tx.type_color }};display:inline-block;"></span>{{ tx.type }}</span></td>
-            <td><div style="font-weight:600;font-size:13px;">{{ tx.asset }}</div><div style="font-size:11px;color:var(--muted);">{{ tx.symbol }}</div></td>
-            <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);">{{ tx.from_addr }}</td>
-            <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);">{{ tx.to_addr }}</td>
-            <td style="font-family:'Syne',sans-serif;font-weight:700;">{{ tx.tokens }}</td>
-            <td style="color:{{ tx.type_color }};font-weight:600;">{{ tx.value }}</td>
-            <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--accent);">{{ tx.tx_hash[:16] }}...</td>
-            <td style="color:var(--muted);font-size:12px;">{{ tx.time }}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+      <div class="table-scroll">
+        <table class="tx-table">
+          <thead><tr><th>Type</th><th>Asset</th><th>From</th><th>To</th><th>Tokens</th><th>Value</th><th>TX Hash</th><th>Time</th></tr></thead>
+          <tbody>
+            {% for tx in transactions %}
+            <tr>
+              <td><span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;"><span style="width:6px;height:6px;border-radius:50%;background:{{ tx.type_color }};display:inline-block;"></span>{{ tx.type }}</span></td>
+              <td><div style="font-weight:600;font-size:13px;">{{ tx.asset }}</div><div style="font-size:11px;color:var(--muted);">{{ tx.symbol }}</div></td>
+              <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);">{{ tx.from_addr }}</td>
+              <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);">{{ tx.to_addr }}</td>
+              <td style="font-family:'Syne',sans-serif;font-weight:700;">{{ tx.tokens }}</td>
+              <td style="color:{{ tx.type_color }};font-weight:600;">{{ tx.value }}</td>
+              <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--accent);">{{ tx.tx_hash[:16] }}...</td>
+              <td style="color:var(--muted);font-size:12px;">{{ tx.time }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>

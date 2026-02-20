@@ -8,11 +8,12 @@
     <div class="page-header">
       <div><div class="page-title">Marketplace</div><div class="page-sub">Browse tokenized assets available for purchase</div></div>
       <div class="btn-row">
-        <input class="form-input" style="width:220px;" placeholder="🔍 Search assets..." readonly/>
+        <input class="form-input" style="width:200px;" placeholder="🔍 Search assets..." readonly/>
         <button class="btn btn-secondary">⚙ Filter</button>
       </div>
     </div>
-    <div style="display:flex;gap:8px;margin-bottom:24px;">
+    <!-- filter tags: allow wrapping on small screens -->
+    <div style="display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;">
       {% for t in asset_types %}
       <a href="/marketplace?type={{ t }}" class="tag {% if t == active_filter %}tag-blue{% else %}tag-amber{% endif %}" style="text-decoration:none;padding:7px 14px;cursor:pointer;">{{ t }}</a>
       {% endfor %}
@@ -22,9 +23,9 @@
       <div class="mkt-card">
         <div class="mkt-thumb" style="background:{{ a.color }}22;">{{ a.emoji }}</div>
         <div class="mkt-body">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
-            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;">{{ a.name }}</div>
-            <span class="tag tag-{% if a.status=='Active' %}green{% elif a.status=='IPO' %}red{% elif a.status=='Partial' %}amber{% else %}blue{% endif %}">{{ a.status }}</span>
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;gap:8px;">
+            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ a.name }}</div>
+            <span class="tag tag-{% if a.status=='Active' %}green{% elif a.status=='IPO' %}red{% elif a.status=='Partial' %}amber{% else %}blue{% endif %}" style="flex-shrink:0;">{{ a.status }}</span>
           </div>
           <div style="font-size:12px;color:var(--muted);margin-bottom:12px;">{{ a.type }} · {{ a.location }}</div>
           <div style="display:flex;justify-content:space-between;margin-bottom:10px;">

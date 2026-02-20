@@ -8,7 +8,8 @@
     <div class="page-header">
       <div><div class="page-title">Buy / Sell / Transfer</div><div class="page-sub">Execute token transactions on the blockchain</div></div>
     </div>
-    <div style="display:grid;grid-template-columns:600px 1fr;gap:24px;">
+    <!-- was fixed 600px — now fluid -->
+    <div class="col-2-left">
       <div class="card">
         <div class="card-header"><div class="card-title">⇄ Transaction Wizard</div></div>
         <div class="card-body">
@@ -25,11 +26,11 @@
             <div class="form-group"><label class="form-label">Action</label>
               <div class="action-toggle">
                 <label style="cursor:pointer;"><input type="radio" name="action" value="Buy" checked style="display:none;"/>
-                  <div class="action-btn selected-buy" onclick="this.parentElement.click()">🛒 Buy</div></label>
+                  <div class="action-btn selected-buy">🛒 Buy</div></label>
                 <label style="cursor:pointer;"><input type="radio" name="action" value="Sell" style="display:none;"/>
-                  <div class="action-btn" onclick="this.parentElement.click()">💸 Sell</div></label>
+                  <div class="action-btn">💸 Sell</div></label>
                 <label style="cursor:pointer;"><input type="radio" name="action" value="Transfer" style="display:none;"/>
-                  <div class="action-btn" onclick="this.parentElement.click()">⇄ Transfer</div></label>
+                  <div class="action-btn">⇄ Transfer</div></label>
               </div>
             </div>
             <div class="form-group"><label class="form-label">Select Asset *</label>
@@ -52,20 +53,22 @@
       </div>
       <div class="card">
         <div class="card-header"><div class="card-title">Recent Transactions</div></div>
-        <table class="tx-table">
-          <thead><tr><th>Type</th><th>Asset</th><th>Tokens</th><th>Value</th><th>Time</th></tr></thead>
-          <tbody>
-            {% for tx in transactions[:8] %}
-            <tr>
-              <td><span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;"><span style="width:6px;height:6px;border-radius:50%;background:{{ tx.type_color }};display:inline-block;"></span>{{ tx.type }}</span></td>
-              <td style="font-size:12px;font-weight:500;">{{ tx.symbol }}</td>
-              <td style="font-family:'Syne',sans-serif;font-weight:700;">{{ tx.tokens }}</td>
-              <td style="color:{{ tx.type_color }};font-weight:600;">{{ tx.value }}</td>
-              <td style="color:var(--muted);font-size:12px;">{{ tx.time }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+        <div class="table-scroll">
+          <table class="tx-table">
+            <thead><tr><th>Type</th><th>Asset</th><th>Tokens</th><th>Value</th><th>Time</th></tr></thead>
+            <tbody>
+              {% for tx in transactions[:8] %}
+              <tr>
+                <td><span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;"><span style="width:6px;height:6px;border-radius:50%;background:{{ tx.type_color }};display:inline-block;"></span>{{ tx.type }}</span></td>
+                <td style="font-size:12px;font-weight:500;">{{ tx.symbol }}</td>
+                <td style="font-family:'Syne',sans-serif;font-weight:700;">{{ tx.tokens }}</td>
+                <td style="color:{{ tx.type_color }};font-weight:600;">{{ tx.value }}</td>
+                <td style="color:var(--muted);font-size:12px;">{{ tx.time }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
